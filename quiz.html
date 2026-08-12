@@ -495,12 +495,18 @@ footer{ padding:64px 0 40px; background:var(--forest-deep); color:var(--cream); 
 
 .checkbox-row{
   display:flex; align-items:flex-start; gap:10px;
-  margin-bottom:14px;
+  margin-bottom:12px;
 }
 .checkbox-row input[type="checkbox"]{
-  width:18px; height:18px; margin-top:2px; flex-shrink:0; accent-color:var(--forest);
+  width:18px; height:18px; margin-top:3px; flex-shrink:0; accent-color:var(--forest);
+  cursor:pointer;
 }
-.checkbox-row label{ font-size:12.5px; opacity:.78; line-height:1.5; }
+.checkbox-row label{ font-size:12.5px; opacity:.78; line-height:1.5; cursor:pointer; }
+.checkbox-row label a{
+  color:var(--forest); text-decoration:underline; text-underline-offset:2px;
+}
+.checkbox-row label a:hover{ opacity:1; }
+.req-star{ color:#a4372b; font-weight:700; margin-left:2px; }
 
 .submit-status{
   font-size:13px;
@@ -510,6 +516,12 @@ footer{ padding:64px 0 40px; background:var(--forest-deep); color:var(--cream); 
 }
 .submit-status.ok{ color:var(--forest); }
 .submit-status.err{ color:#a33; }
+
+.rodo-note{
+  display:block; margin-top:14px; font-size:11px; line-height:1.5;
+  color:rgba(34,48,31,.55); text-align:left;
+}
+.rodo-note a{ color:inherit; text-decoration:underline; text-underline-offset:2px; }
 
 /* Course CTA - secondary */
 .course-cta{
@@ -646,11 +658,24 @@ footer{ padding:64px 0 40px; background:var(--forest-deep); color:var(--cream); 
               <input type="email" id="emailInput" placeholder="np. twoj@email.pl" autocomplete="email">
             </div>
             <div class="checkbox-row">
-              <input type="checkbox" id="marketingConsent">
-              <label for="marketingConsent">Zgadzam się na otrzymywanie materiałów edukacyjnych i informacji o kursach Szkoły Komórki drogą mailową. Zgodę mogę wycofać w każdej chwili.</label>
+              <input type="checkbox" id="termsConsent" required>
+              <label for="termsConsent">
+                Akceptuję <a href="https://docs.google.com/document/d/1-IyK3orH79MyEZ3TbG_Ri9h5JO9kYyZc/edit?usp=sharing" target="_blank" rel="noopener">Regulamin dostarczania treści cyfrowych</a>
+                i potwierdzam zapoznanie się z <a href="https://docs.google.com/document/d/1-IyK3orH79MyEZ3TbG_Ri9h5JO9kYyZc/edit?usp=sharing" target="_blank" rel="noopener">Polityką Prywatności</a>.
+                <span class="req-star" aria-hidden="true">*</span>
+              </label>
             </div>
-            <button class="btn btn-lg" id="submitBtn" style="width:100%;justify-content:center;">Odbierz darmowe materiały</button>
+            <div class="checkbox-row">
+              <input type="checkbox" id="marketingConsent">
+              <label for="marketingConsent">
+                Wyrażam zgodę na otrzymanie jednorazowej informacji marketingowej i handlowej wewnątrz wiadomości e-mail zawierającej darmowy materiał.
+              </label>
+            </div>
+            <button class="btn btn-lg" id="submitBtn" style="width:100%;justify-content:center;margin-top:6px;">Odbierz darmowe materiały</button>
             <p class="submit-status" id="submitStatus"></p>
+            <small class="rodo-note">
+              Administratorem Twoich danych osobowych jest Szkoła Komórki Jakub Dudek. Twoje dane (adres e-mail) będą przetwarzane w celu dostarczenia zamówionego materiału cyfrowego oraz – jeśli wyrazisz na to zgodę – jednorazowego przesłania informacji marketingowych. Techniczna wysyłka wiadomości realizowana jest za pośrednictwem infrastruktury Google. Masz prawo do cofnięcia zgody w dowolnym momencie. Szczegóły znajdziesz w <a href="https://docs.google.com/document/d/1-IyK3orH79MyEZ3TbG_Ri9h5JO9kYyZc/edit?usp=sharing" target="_blank" rel="noopener">Polityce Prywatności</a>.
+            </small>
           </div>
 
           <div class="course-cta">
@@ -831,6 +856,7 @@ const resultTime = document.getElementById('resultTime');
 const submitBtn = document.getElementById('submitBtn');
 const submitStatus = document.getElementById('submitStatus');
 const emailInput = document.getElementById('emailInput');
+const termsConsent = document.getElementById('termsConsent');
 const marketingConsent = document.getElementById('marketingConsent');
 
 document.getElementById('startBtn').addEventListener('click', startQuiz);
@@ -948,8 +974,8 @@ function sendResult(){
     emailInput.focus();
     return;
   }
-  if(!marketingConsent.checked){
-    submitStatus.textContent = 'Zaznacz zgodę na kontakt mailowy, żeby wysłać Ci materiały.';
+  if(!termsConsent.checked){
+    submitStatus.textContent = 'Aby otrzymać materiały, zaakceptuj Regulamin i Politykę Prywatności.';
     submitStatus.className = 'submit-status err';
     return;
   }
@@ -967,12 +993,11 @@ function sendResult(){
     timeStr: r.timeStr,
     source: getTrafficSource(),
     email: email,
-    marketingConsent: true,
+    termsConsent: true,
+    marketingConsent: !!marketingConsent.checked,
     userAgent: navigator.userAgent.slice(0, 120)
   };
 
-  // Google Apps Script requires no-cors or form-urlencoded for simple deploy
-  // Using text/plain + mode no-cors is the classic workaround for CORS
   fetch(GAS_ENDPOINT, {
     method: 'POST',
     mode: 'no-cors',
@@ -983,7 +1008,6 @@ function sendResult(){
     submitStatus.className = 'submit-status ok';
     submitBtn.textContent = 'Wysłano ✓';
   }).catch(function(){
-    // no-cors often doesn't give real response; treat as success for UX
     submitStatus.textContent = 'Gotowe! Materiały trafią na Twoją skrzynkę wkrótce.';
     submitStatus.className = 'submit-status ok';
     submitBtn.textContent = 'Wysłano ✓';

@@ -897,17 +897,28 @@ a.doc-card:hover{
 .form-field input[type="email"]:focus{ outline:none; border-color:var(--forest); background:var(--paper); }
 .checkbox-row{
   display:flex; align-items:flex-start; gap:10px;
-  margin-bottom:18px;
+  margin-bottom:12px;
 }
 .checkbox-row input[type="checkbox"]{
-  width:18px; height:18px; margin-top:2px; flex-shrink:0; accent-color:var(--forest);
+  width:18px; height:18px; margin-top:3px; flex-shrink:0; accent-color:var(--forest);
+  cursor:pointer;
 }
-.checkbox-row label{ font-size:12.5px; opacity:.78; line-height:1.5; }
+.checkbox-row label{ font-size:12.5px; opacity:.78; line-height:1.5; cursor:pointer; }
+.checkbox-row label a{
+  color:var(--forest); text-decoration:underline; text-underline-offset:2px;
+}
+.checkbox-row label a:hover{ opacity:1; }
+.req-star{ color:#a4372b; font-weight:700; margin-left:2px; }
 .form-status{
   margin-top:14px; font-size:13px; min-height:18px; text-align:center;
 }
 .form-status.ok{ color:var(--forest); font-weight:600; }
 .form-status.err{ color:#a4372b; font-weight:600; }
+.rodo-note{
+  display:block; margin-top:14px; font-size:11px; line-height:1.5;
+  color:rgba(34,48,31,.55); text-align:left;
+}
+.rodo-note a{ color:inherit; text-decoration:underline; text-underline-offset:2px; }
 
 @media (max-width:760px){
   .material-card{ grid-template-columns:1fr; }
@@ -1065,11 +1076,24 @@ a.doc-card:hover{
             <input type="email" id="materialsEmail" placeholder="np. twoj@email.pl" autocomplete="email">
           </div>
           <div class="checkbox-row">
-            <input type="checkbox" id="marketingConsent">
-            <label for="marketingConsent">Zgadzam się na otrzymywanie materiałów edukacyjnych i informacji o kursach Szkoły Komórki drogą mailową. Zgodę mogę wycofać w każdej chwili.</label>
+            <input type="checkbox" id="termsConsent" required>
+            <label for="termsConsent">
+              Akceptuję <a href="https://docs.google.com/document/d/1-IyK3orH79MyEZ3TbG_Ri9h5JO9kYyZc/edit?usp=sharing" target="_blank" rel="noopener">Regulamin dostarczania treści cyfrowych</a>
+              i potwierdzam zapoznanie się z <a href="https://docs.google.com/document/d/1-IyK3orH79MyEZ3TbG_Ri9h5JO9kYyZc/edit?usp=sharing" target="_blank" rel="noopener">Polityką Prywatności</a>.
+              <span class="req-star" aria-hidden="true">*</span>
+            </label>
           </div>
-          <button class="btn btn-lg" id="materialsSubmitBtn" style="width:100%;justify-content:center;">Wyślij mi materiały</button>
+          <div class="checkbox-row">
+            <input type="checkbox" id="marketingConsent">
+            <label for="marketingConsent">
+              Wyrażam zgodę na otrzymanie jednorazowej informacji marketingowej i handlowej wewnątrz wiadomości e-mail zawierającej darmowy materiał.
+            </label>
+          </div>
+          <button class="btn btn-lg" id="materialsSubmitBtn" style="width:100%;justify-content:center;margin-top:6px;">Wyślij mi materiały</button>
           <p class="form-status" id="materialsStatus"></p>
+          <small class="rodo-note">
+            Administratorem Twoich danych osobowych jest Szkoła Komórki Jakub Dudek. Twoje dane (adres e-mail) będą przetwarzane w celu dostarczenia zamówionego materiału cyfrowego oraz – jeśli wyrazisz na to zgodę – jednorazowego przesłania informacji marketingowych. Techniczna wysyłka wiadomości realizowana jest za pośrednictwem infrastruktury Google. Masz prawo do cofnięcia zgody w dowolnym momencie. Szczegóły znajdziesz w <a href="https://docs.google.com/document/d/1-IyK3orH79MyEZ3TbG_Ri9h5JO9kYyZc/edit?usp=sharing" target="_blank" rel="noopener">Polityce Prywatności</a>.
+          </small>
         </div>
       </div>
     </div>
@@ -1157,6 +1181,7 @@ if('IntersectionObserver' in window){
 
 /* ========== FORMULARZ ZBIERANIA MAILI ========== */
 const materialsEmail = document.getElementById('materialsEmail');
+const termsConsent = document.getElementById('termsConsent');
 const marketingConsent = document.getElementById('marketingConsent');
 const materialsSubmitBtn = document.getElementById('materialsSubmitBtn');
 const materialsStatus = document.getElementById('materialsStatus');
@@ -1183,8 +1208,8 @@ materialsSubmitBtn.addEventListener('click', function(){
     materialsEmail.focus();
     return;
   }
-  if(!marketingConsent.checked){
-    materialsStatus.textContent = 'Zaznacz zgodę na kontakt mailowy, żeby wysłać Ci materiały.';
+  if(!termsConsent.checked){
+    materialsStatus.textContent = 'Aby otrzymać materiały, zaakceptuj Regulamin i Politykę Prywatności.';
     materialsStatus.className = 'form-status err';
     return;
   }
@@ -1197,7 +1222,8 @@ materialsSubmitBtn.addEventListener('click', function(){
     date: new Date().toISOString(),
     page: 'materialy',
     email: email,
-    marketingConsent: true,
+    termsConsent: true,
+    marketingConsent: !!marketingConsent.checked,
     source: getTrafficSource(),
     userAgent: navigator.userAgent.slice(0, 120)
   };
