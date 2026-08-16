@@ -1007,7 +1007,6 @@ footer{ padding:64px 0 40px; }
       <span class="brand-name">szkoła komórki</span>
     </a>
     <ul class="nav-links">
-      <li><a href="index.html#program">Program</a></li>
       <li><a href="index.html#jak-to-dziala">Jak to działa</a></li>
       <li><a href="index.html#cennik">Cennik</a></li>
       <li><a href="faq.html">FAQ</a></li>
@@ -1015,14 +1014,18 @@ footer{ padding:64px 0 40px; }
       <li><a href="dokumenty.html">Dokumenty</a></li>
       <li><a href="materialy.html">Materiały</a></li>
       <li><a href="zespol.html" class="active">Nasz zespół</a></li>
-      <li><a href="index.html#kontakt" class="btn btn-clay" style="padding:12px 22px;font-size:14px;">Zapisz się</a></li>
     </ul>
-    <button class="burger" id="burgerBtn" aria-label="Menu"><span></span></button>
+    <div class="nav-actions">
+      <a href="#" class="btn js-cta-link">
+        Zapisz się
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <button class="burger" id="burgerBtn" aria-label="Menu"><span></span></button>
+    </div>
   </div>
 </nav>
 
 <div class="mobile-panel" id="mobilePanel">
-  <a href="index.html#program">Program</a>
   <a href="index.html#jak-to-dziala">Jak to działa</a>
   <a href="index.html#cennik">Cennik</a>
   <a href="faq.html">FAQ</a>
@@ -1030,7 +1033,7 @@ footer{ padding:64px 0 40px; }
   <a href="dokumenty.html">Dokumenty</a>
   <a href="materialy.html">Materiały</a>
   <a href="zespol.html">Nasz zespół</a>
-  <a href="index.html#kontakt">Zapisz się</a>
+  <a href="#" class="btn js-cta-link" style="align-self:flex-start;margin-top:10px;">Zapisz się</a>
 </div>
 
 <section class="team-hero">
