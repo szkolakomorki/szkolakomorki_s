@@ -640,17 +640,21 @@ footer{ padding:64px 0 40px; background:var(--forest-deep); color:var(--cream); 
           <p class="result-time" id="resultTime"></p>
 
           <div class="lead-box">
-            <span class="lead-eyebrow">Darmowe materiały</span>
-            <h3>Odbierz pakiet na e-mail</h3>
-            <p class="lead-intro">Podaj adres e-mail, a wyślemy Ci od razu:</p>
+            <span class="lead-eyebrow">Newsletter + prezent</span>
+            <h3>Zapisz się i odbierz prezent powitalny</h3>
+            <p class="lead-intro">Dołącz do newslettera edukacyjnego Szkoły Komórki. Po zapisie od razu wyślemy Ci:</p>
             <ul class="lead-rewards">
               <li>
                 <span class="check">✓</span>
-                <span>Opracowanie 10 zadań CKE - z wyjaśnieniem i kluczem</span>
+                <span><strong>Prezent:</strong> opracowanie 10 zadań CKE — z wyjaśnieniem i kluczem</span>
               </li>
               <li>
                 <span class="check">✓</span>
-                <span>Zestaw 30 fiszek z metabolizmu - do szybkiej powtórki</span>
+                <span><strong>Prezent:</strong> 30 fiszek z metabolizmu — do szybkiej powtórki</span>
+              </li>
+              <li>
+                <span class="check">✓</span>
+                <span>Regularne maile z powtórkami i wskazówkami do matury</span>
               </li>
             </ul>
             <div class="email-box">
@@ -660,21 +664,22 @@ footer{ padding:64px 0 40px; background:var(--forest-deep); color:var(--cream); 
             <div class="checkbox-row">
               <input type="checkbox" id="termsConsent" required>
               <label for="termsConsent">
-                Akceptuję <a href="https://docs.google.com/document/d/1-IyK3orH79MyEZ3TbG_Ri9h5JO9kYyZc/edit?usp=sharing" target="_blank" rel="noopener">Regulamin dostarczania treści cyfrowych</a>
-                i potwierdzam zapoznanie się z <a href="https://docs.google.com/document/d/1-IyK3orH79MyEZ3TbG_Ri9h5JO9kYyZc/edit?usp=sharing" target="_blank" rel="noopener">Polityką Prywatności</a>.
+                Potwierdzam zapoznanie się z <a href="https://docs.google.com/document/d/1-IyK3orH79MyEZ3TbG_Ri9h5JO9kYyZc/edit?usp=sharing" target="_blank" rel="noopener">Polityką Prywatności</a>
+                oraz akceptuję <a href="https://docs.google.com/document/d/1-IyK3orH79MyEZ3TbG_Ri9h5JO9kYyZc/edit?usp=sharing" target="_blank" rel="noopener">Regulamin</a>.
                 <span class="req-star" aria-hidden="true">*</span>
               </label>
             </div>
             <div class="checkbox-row">
-              <input type="checkbox" id="marketingConsent">
+              <input type="checkbox" id="marketingConsent" required>
               <label for="marketingConsent">
-                Wyrażam zgodę na otrzymanie jednorazowej informacji marketingowej i handlowej wewnątrz wiadomości e-mail zawierającej darmowy materiał.
+                Wyrażam zgodę na otrzymywanie od Szkoły Komórki (Jakub Dudek) informacji handlowych i marketingowych drogą elektroniczną, w tym newslettera edukacyjnego oraz wiadomości o kursach i materiałach, na podany adres e-mail.
+                <span class="req-star" aria-hidden="true">*</span>
               </label>
             </div>
-            <button class="btn btn-lg" id="submitBtn" style="width:100%;justify-content:center;margin-top:6px;">Odbierz darmowe materiały</button>
+            <button class="btn btn-lg" id="submitBtn" style="width:100%;justify-content:center;margin-top:6px;">Zapisz się do newslettera</button>
             <p class="submit-status" id="submitStatus"></p>
             <small class="rodo-note">
-              Administratorem Twoich danych osobowych jest Szkoła Komórki Jakub Dudek. Twoje dane (adres e-mail) będą przetwarzane w celu dostarczenia zamówionego materiału cyfrowego oraz – jeśli wyrazisz na to zgodę – jednorazowego przesłania informacji marketingowych. Techniczna wysyłka wiadomości realizowana jest za pośrednictwem infrastruktury Google. Masz prawo do cofnięcia zgody w dowolnym momencie. Szczegóły znajdziesz w <a href="https://docs.google.com/document/d/1-IyK3orH79MyEZ3TbG_Ri9h5JO9kYyZc/edit?usp=sharing" target="_blank" rel="noopener">Polityce Prywatności</a>.
+              Administratorem Twoich danych osobowych jest Szkoła Komórki Jakub Dudek. Podanie adresu e-mail jest dobrowolne, ale niezbędne do zapisu. Dane będą przetwarzane w celu realizacji subskrypcji newslettera, dostarczenia prezentu powitalnego (materiałów edukacyjnych) oraz — na podstawie Twojej zgody — przesyłania informacji handlowych i marketingowych drogą elektroniczną. Zgodę możesz cofnąć w każdej chwili (link w stopce maila lub kontakt do administratora), bez wpływu na zgodność z prawem przetwarzania sprzed jej cofnięcia. Masz prawo dostępu do danych, ich sprostowania, usunięcia, ograniczenia przetwarzania, przenoszenia oraz wniesienia skargi do Prezesa UODO. Techniczna wysyłka może być realizowana za pośrednictwem infrastruktury Google. Szczegóły: <a href="https://docs.google.com/document/d/1-IyK3orH79MyEZ3TbG_Ri9h5JO9kYyZc/edit?usp=sharing" target="_blank" rel="noopener">Polityka Prywatności</a>.
             </small>
           </div>
 
@@ -735,9 +740,12 @@ footer{ padding:64px 0 40px; background:var(--forest-deep); color:var(--cream); 
 
 <script>
 /* ============================================================
-   KONFIGURACJA - PODMIEŃ URL NA SWÓJ GOOGLE APPS SCRIPT
+   KONFIGURACJA
+   Formularz → Google Apps Script → MailerLite API
+   (klucz API jest tylko w skrypcie GAS, nie na stronie)
+   Po wdrożeniu nowego skryptu wklej poniżej nowy URL /exec
    ============================================================ */
-const GAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbxhyUeTg0d4yxa6vXHJaiZYzVQj8CkH6nkupkqS4CA_u89iQcF0cqMvbin2n7Pb-4gv/exec";
+const GAS_ENDPOINT = "https://script.google.com/macros/s/AKfycbw9lxAQITZfNacw5xfrK29QmDvsTnf7Cq3LYjJ249frcZpWhHx3FXd8K3CHuZ_BKpwnRA/exec";
 /* Po wdrożeniu Apps Script wklej tutaj pełny URL web app */
 
 const FORM_URL = "https://forms.gle/6jXFxoomydPy18Cw7";
@@ -937,10 +945,10 @@ function finishQuiz(){
   scoreBig.textContent = score;
   resultTime.textContent = 'Czas: ' + timeStr;
 
-  if(score >= 9) resultMsg.textContent = 'Świetny wynik! Jesteś bardzo dobrze przygotowany/a. Odbierz darmowe materiały - sprawdź, czy jakaś wiedza w nich zawarta może Cię jeszcze zaskoczyć!';
-  else if(score >= 7) resultMsg.textContent = 'Dobry wynik! Kilka tematów warto jeszcze powtórzyć. Odbierz darmowe materiały, które pomogą ci w powtórkach!';
-  else if(score >= 5) resultMsg.textContent = 'Solidna baza, ale jest jeszcze nad czym popracować. Odbierz darmowe materiały, które pomogą ci w powtórkach!';
-  else resultMsg.textContent = 'To dobry moment, żeby systematycznie nadrobić materiał - pomożemy Ci w tym. Odbierz darmowe materiały, od których możesz rozpocząć powtórki!';
+  if(score >= 9) resultMsg.textContent = 'Świetny wynik! Jesteś bardzo dobrze przygotowany/a. Zapisz się do newslettera i odbierz prezent powitalny — sprawdź, czy coś Cię jeszcze zaskoczy.';
+  else if(score >= 7) resultMsg.textContent = 'Dobry wynik! Kilka tematów warto jeszcze powtórzyć. Zapisz się do newslettera i odbierz prezent powitalny do powtórek.';
+  else if(score >= 5) resultMsg.textContent = 'Solidna baza, ale jest jeszcze nad czym popracować. Zapisz się do newslettera i odbierz prezent powitalny do powtórek.';
+  else resultMsg.textContent = 'To dobry moment, żeby systematycznie nadrobić materiał — pomożemy Ci w tym. Zapisz się do newslettera i odbierz prezent powitalny na start powtórek.';
 
   // store for submit
   window.__quizResult = {
@@ -970,13 +978,18 @@ function sendResult(){
   const email = (emailInput.value || '').trim();
 
   if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
-    submitStatus.textContent = 'Podaj prawidłowy adres e-mail, żeby otrzymać materiały.';
+    submitStatus.textContent = 'Podaj prawidłowy adres e-mail, żeby zapisać się do newslettera.';
     submitStatus.className = 'submit-status err';
     emailInput.focus();
     return;
   }
   if(!termsConsent.checked){
-    submitStatus.textContent = 'Aby otrzymać materiały, zaakceptuj Regulamin i Politykę Prywatności.';
+    submitStatus.textContent = 'Aby zapisać się, zaakceptuj Politykę Prywatności i Regulamin.';
+    submitStatus.className = 'submit-status err';
+    return;
+  }
+  if(!marketingConsent.checked){
+    submitStatus.textContent = 'Aby zapisać się do newslettera, wyraź zgodę na otrzymywanie wiadomości e-mail.';
     submitStatus.className = 'submit-status err';
     return;
   }
@@ -987,6 +1000,8 @@ function sendResult(){
 
   const payload = {
     date: new Date().toISOString(),
+    page: 'quiz',
+    type: 'newsletter',
     score: r.score + '/' + r.total,
     correct: r.score,
     total: r.total,
@@ -995,7 +1010,8 @@ function sendResult(){
     source: getTrafficSource(),
     email: email,
     termsConsent: true,
-    marketingConsent: !!marketingConsent.checked,
+    marketingConsent: true,
+    newsletterConsent: true,
     userAgent: navigator.userAgent.slice(0, 120)
   };
 
@@ -1005,17 +1021,16 @@ function sendResult(){
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
     body: JSON.stringify(payload)
   }).then(function(){
-    submitStatus.textContent = 'Gotowe! Materiały trafią na Twoją skrzynkę wkrótce.';
+    submitStatus.textContent = 'Gotowe! Jesteś zapisany/a do newslettera — prezent powitalny trafi na skrzynkę wkrótce.';
     submitStatus.className = 'submit-status ok';
     submitBtn.textContent = 'Wysłano ✓';
   }).catch(function(){
-    submitStatus.textContent = 'Gotowe! Materiały trafią na Twoją skrzynkę wkrótce.';
+    submitStatus.textContent = 'Gotowe! Jesteś zapisany/a do newslettera — prezent powitalny trafi na skrzynkę wkrótce.';
     submitStatus.className = 'submit-status ok';
     submitBtn.textContent = 'Wysłano ✓';
   });
 }
 </script>
-
 <!-- Cookie Consent Banner (RODO / ePrivacy compliant) -->
 <style>
 #cookie-banner{
