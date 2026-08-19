@@ -1739,7 +1739,7 @@ if('IntersectionObserver' in window){
 <div id="cookie-banner" role="dialog" aria-label="Zgoda na pliki cookies" aria-live="polite">
   <div class="cookie-inner">
     <div class="cookie-text">
-      Używamy plików cookies niezbędnych do działania strony oraz opcjonalnych cookies analitycznych (Google Analytics), które pomagają nam ulepszać serwis.
+      Używamy plików cookies niezbędnych do działania strony oraz opcjonalnych cookies analitycznych i marketingowych (Google Analytics, Meta Pixel, Microsoft Clarity), które pomagają nam ulepszać serwis i mierzyć skuteczność reklam.
       Więcej w <a href="dokumenty.html" target="_blank" rel="noopener">Polityce prywatności</a>.
       Możesz zaakceptować wszystkie, odrzucić opcjonalne lub dostosować ustawienia.
     </div>
@@ -1760,8 +1760,8 @@ if('IntersectionObserver' in window){
     <label>
       <input type="checkbox" id="cookieAnalyticsToggle">
       <span>
-        <span class="cookie-cat-title">Analityczne</span>
-        <span class="cookie-cat-desc">Google Analytics — zbieranie anonimowych statystyk odwiedzin w celu ulepszania strony.</span>
+        <span class="cookie-cat-title">Analityczne i marketingowe</span>
+        <span class="cookie-cat-desc">Google Analytics, Meta Pixel i Microsoft Clarity — anonimowe statystyki, analiza zachowania oraz pomiar skuteczności reklam.</span>
       </span>
     </label>
     <div class="cookie-actions" style="margin-top:8px;">
@@ -1773,12 +1773,18 @@ if('IntersectionObserver' in window){
 <script>
 (function(){
   var CONSENT_KEY = 'sk_cookie_consent';
+  var CONSENT_VERSION = 2;
   var GA_ID = 'G-4M0LFNG3B5';
+  var META_PIXEL_ID = '1067112372537089';
+  var CLARITY_ID = 'y4p5cse0q1';
 
   function getConsent(){
     try {
       var raw = localStorage.getItem(CONSENT_KEY);
-      return raw ? JSON.parse(raw) : null;
+      if(!raw) return null;
+      var data = JSON.parse(raw);
+      if(!data || data.version !== CONSENT_VERSION) return null;
+      return data;
     } catch(e){ return null; }
   }
 
@@ -1787,7 +1793,7 @@ if('IntersectionObserver' in window){
       necessary: true,
       analytics: !!analytics,
       timestamp: new Date().toISOString(),
-      version: 1
+      version: CONSENT_VERSION
     };
     try { localStorage.setItem(CONSENT_KEY, JSON.stringify(data)); } catch(e){}
     return data;
@@ -1807,9 +1813,42 @@ if('IntersectionObserver' in window){
     document.head.appendChild(s);
   }
 
+  function loadMetaPixel(){
+    if(window.__metaPixelLoaded) return;
+    window.__metaPixelLoaded = true;
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', META_PIXEL_ID);
+    fbq('track', 'PageView');
+    // noscript fallback image
+    var img = document.createElement('img');
+    img.height = 1; img.width = 1; img.style.display = 'none';
+    img.src = 'https://www.facebook.com/tr?id=' + META_PIXEL_ID + '&ev=PageView&noscript=1';
+    img.alt = '';
+    document.body.appendChild(img);
+  }
+
+  function loadClarity(){
+    if(window.__clarityLoaded) return;
+    window.__clarityLoaded = true;
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", CLARITY_ID);
+  }
+
   function applyConsent(consent){
     if(consent && consent.analytics){
       loadGoogleAnalytics();
+      loadMetaPixel();
+      loadClarity();
     }
   }
 
@@ -1870,6 +1909,5 @@ if('IntersectionObserver' in window){
   }
 })();
 </script>
-
 </body>
 </html>
