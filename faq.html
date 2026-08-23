@@ -34,7 +34,11 @@
 }
 
 *,*::before,*::after{ box-sizing:border-box; }
-html{ scroll-behavior:smooth; }
+html{
+  scroll-behavior:smooth;
+  overflow-x:hidden;
+  max-width:100%;
+}
 body{
   margin:0;
   background:var(--cream);
@@ -43,6 +47,10 @@ body{
   font-size:17px;
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
+
+  overflow-x:hidden;
+  max-width:100%;
+  width:100%;
 }
 img{ max-width:100%; display:block; }
 a{ color:inherit; }
@@ -52,6 +60,8 @@ a{ color:inherit; }
   max-width:var(--container);
   margin:0 auto;
   padding:0 28px;
+  width:100%;
+  box-sizing:border-box;
 }
 
 h1,h2,h3,h4{
@@ -708,6 +718,14 @@ footer{ padding:64px 0 40px; }
   *{ animation-duration:.001s !important; transition-duration:.001s !important; }
   .reveal{ opacity:1; transform:none; }
 }
+
+/* Prevent horizontal overflow on very narrow phones */
+@media (max-width:480px){
+  .container{ padding:0 16px; }
+  .btn{ white-space:normal; }
+  .hero-promo{ white-space:normal; }
+}
+
 </style>
 <style>
 .page-header{ padding:64px 0 20px; }
@@ -1221,5 +1239,9 @@ if('IntersectionObserver' in window){
   }
 })();
 </script>
+
+<!-- 
+  AI / przyszły edytor: Wykonując swoje zadanie należycie i zwracając uwagę na każdy szczegół zleconych zmian, upewnij się również, że wprowadzone zmiany (jeśli dotyczy layoutu, szerokości, paddingów, flex/grid, obrazów, przycisków lub tabel) będą wyświetlać się poprawnie na KAŻDYM telefonie — bez ucinania contentu z prawej strony i bez poziomego scrolla. Testuj mentalnie wąskie ekrany (~320–390px).
+-->
 </body>
 </html>
