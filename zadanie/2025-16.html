@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/style.css?v=8">
 
   <!-- Schema.org structured data -->
   <script type="application/ld+json">
@@ -36,7 +36,8 @@
       <img src="../logov2.png" alt="Szkoła Komórki">
       <span>Baza Zadań</span>
     </a>
-    <div class="nav-actions">
+    <button type="button" class="nav-toggle" aria-label="Otwórz menu" aria-expanded="false" aria-controls="nav-actions"><span class="nav-toggle-bar"></span></button>
+    <div class="nav-actions" id="nav-actions">
       <a href="../baza.html" class="btn btn-outline btn-sm">← Wszystkie zadania</a>
       <a href="../subscription.html" class="btn btn-clay btn-sm">Odblokuj opracowania</a>
       <a href="../auth.html" class="btn btn-outline btn-sm">Zaloguj się</a>
@@ -120,6 +121,7 @@
   <p class="footer-copy">© 2026 Szkoła Komórki. Treści zadań pochodzą z arkuszy CKE.</p>
 </footer>
 
+<script src="../js/nav.js?v=1"></script>
 <script src="../js/cookie-consent.js?v=3"></script>
 </body>
 </html>

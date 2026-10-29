@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=6">
+  <link rel="stylesheet" href="css/style.css?v=8">
 </head>
 <body>
 
@@ -24,7 +24,8 @@
       <img src="logov2.png" alt="Szkoła Komórki">
       <span>Szkoła Komórki</span>
     </a>
-    <div class="nav-actions">
+    <button type="button" class="nav-toggle" aria-label="Otwórz menu" aria-expanded="false" aria-controls="nav-actions"><span class="nav-toggle-bar"></span></button>
+    <div class="nav-actions" id="nav-actions">
       <a href="matura-z-biologii.html" class="btn btn-ghost btn-sm nav-hide-sm">Darmowa próbka</a>
       <a href="baza.html" class="btn btn-outline btn-sm">Baza zadań</a>
       <a href="podrecznik.html" class="btn btn-outline btn-sm">Podręcznik</a>
@@ -130,6 +131,7 @@
 <script src="js/auth.js?v=7"></script>
 <script src="js/actions.js"></script>
 <script src="js/page-index.js?v=1"></script>
+<script src="js/nav.js?v=1"></script>
 <script src="js/cookie-consent.js?v=3"></script>
 </body>
 </html>
