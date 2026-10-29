@@ -1,1 +1,0 @@
-# szkolakomorki_s
