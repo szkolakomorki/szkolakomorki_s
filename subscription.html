@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com https://connect.facebook.net https://www.clarity.ms https://scripts.clarity.ms; connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://www.facebook.com https://connect.facebook.net https://*.clarity.ms https://c.bing.com https://dtfkjtsjubfxsahrgkua.supabase.co; img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com https://www.facebook.com https://*.clarity.ms https://c.bing.com https://dtfkjtsjubfxsahrgkua.supabase.co https://maturabiolchem.pl; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="canonical" href="https://szkolakomorki.pl/subscription.html">
+  <title>Subskrypcja - Szkoła Komórki</title>
+  <meta name="description" content="Odblokuj opracowania do zadań maturalnych z biologii. Miesięczna lub roczna subskrypcja z 3-dniowym trial.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=6">
+</head>
+<body style="background:var(--cream)">
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <img src="logov2.png" alt="Szkoła Komórki">
+      <span>Szkoła Komórki</span>
+    </a>
+    <div class="nav-actions">
+      <span id="user-email" class="nav-user"></span>
+      <a href="baza.html" class="btn btn-outline btn-sm">← Baza zadań</a>
+      <a href="podrecznik.html" class="btn btn-outline btn-sm">Podręcznik</a>
+      <a id="auth-btn" href="auth.html" class="btn btn-outline btn-sm">Zaloguj się</a>
+    </div>
+  </div>
+</nav>
+
+<div class="sub-page">
+
+  <!-- ── STATUS BLOCK (pokazywany gdy user ma subskrypcję) ── -->
+  <div id="status-block" class="sub-status-card hidden">
+    <div class="status-icon">✅</div>
+    <h2 class="status-active">Dostęp aktywny</h2>
+    <p id="status-desc">Twoja subskrypcja jest aktywna.</p>
+    <p style="margin-top:10px;font-size:12px;font-family:var(--font-mono)">
+      <a href="#jak-anulowac">Przejdź tutaj, aby sprawdzić, jak anulować subskrypcję</a>
+    </p>
+    <div style="margin-top:20px">
+      <a href="baza.html" class="btn btn-outline">Przeglądaj zadania</a>
+    </div>
+  </div>
+
+  <!-- ── HERO ── -->
+  <div id="sub-hero" class="sub-hero">
+    <p class="sub-hero-tag">Opracowania do zadań maturalnych z biologii</p>
+    <h1>Naucz się pisać pod klucz -<br><em>ćwicząc na zadaniach</em></h1>
+    <p>Każde zadanie z wyjaśnieniem, teorią i analizą klucza CKE. Treści zadań i klucze zawsze bezpłatne - opracowania w subskrypcji.</p>
+    <a href="matura-z-biologii.html#probka" class="sub-sample-link">
+      <span class="sub-sample-link-text">
+        <strong>Chcesz najpierw zobaczyć, co dostajesz?</strong>
+        <span>Darmowe próbki - pełne opracowanie zadania i zagadnienie z podręcznika, bez logowania.</span>
+      </span>
+      <span class="sub-sample-link-arrow">→</span>
+    </a>
+  </div>
+
+  <!-- ── PLANS ── -->
+  <div id="plans-section">
+    <div class="plans-grid">
+      <!-- Miesięczny -->
+      <div class="plan-card selected" id="plan-monthly" data-click="selectPlan" data-plan="monthly">
+        <div class="plan-name">Miesięczny</div>
+        <div class="plan-price"><sup>PLN</sup> 15</div>
+        <div class="plan-period">/ miesiąc</div>
+        <ul class="plan-features">
+          <li>Wszystkie opracowania</li>
+          <li>Nieograniczony dostęp</li>
+          <li>Anuluj w każdej chwili</li>
+          <li><span class="trial-note">3 dni bezpłatnie</span></li>
+        </ul>
+      </div>
+
+      <!-- Roczny -->
+      <div class="plan-card" id="plan-annual" data-click="selectPlan" data-plan="annual">
+        <div class="plan-badge">Oszczędzasz 50%</div>
+        <div class="plan-name">Roczny</div>
+        <div class="plan-price"><sup>PLN</sup> 90</div>
+        <div class="plan-period">/ rok</div>
+        <ul class="plan-features">
+          <li>Wszystkie opracowania</li>
+          <li>Nieograniczony dostęp</li>
+          <li>Niższa cena niż miesięczny</li>
+          <li><span class="trial-note">3 dni bezpłatnie</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="checkout-msg" class="form-message"></div>
+
+    <!-- CTA -->
+    <div style="text-align:center">
+      <button class="btn btn-clay" style="font-size:16px;padding:14px 36px" id="checkout-btn" data-click="startCheckout">
+        Zacznij 3-dniowy trial →
+      </button>
+      <p style="font-size:12px;font-family:var(--font-mono);color:var(--text-muted);margin-top:12px">
+        Bezpieczna płatność przez Stripe. Możesz anulować przed końcem trialu.
+      </p>
+      <p style="font-size:12px;color:var(--text-muted);margin-top:10px;line-height:1.6">
+        Po 3 dniach subskrypcja odnawia się automatycznie i jest płatna do czasu anulowania. Rozpoczynając trial, akceptujesz
+        <a href="regulamin.html">Regulamin</a> i potwierdzasz zapoznanie się z <a href="polityka-prywatnosci.html">Polityką prywatności</a>.
+      </p>
+    </div>
+
+    <div id="login-cta" class="hidden" style="text-align:center;margin-top:24px">
+      <p style="font-size:15px;color:var(--text-muted);margin-bottom:12px">Zaloguj się, żeby aktywować subskrypcję.</p>
+      <a href="auth.html?redirect=subscription.html" class="btn">Zaloguj się</a>
+      <a href="auth.html?redirect=subscription.html" class="btn btn-outline" style="margin-left:10px">Zarejestruj się</a>
+    </div>
+
+    <!-- Dlaczego tak tanio -->
+    <div class="sub-section sub-why">
+      <h2 class="sub-section-title">Dlaczego tak tanio?</h2>
+      <p class="sub-section-lead">Jesteśmy na etapie budowania platformy. Nowe zadania z opracowaniami pojawiają się niemal codziennie - baza rośnie razem z nami. Cena subskrypcji będzie rosła wraz z rozwojem, ale jeśli zasubskrybujesz teraz, Twoja cena pozostaje taka sama przez cały okres subskrypcji.</p>
+      <p class="sub-section-lead">To też forma wsparcia dla nas w tym czasie. Dzięki Tobie możemy skupić się na tworzeniu treści, zamiast szukać innego finansowania.</p>
+    </div>
+
+    <!-- Co zawiera opracowanie -->
+    <div class="sub-section">
+      <h2 class="sub-section-title">Co zyskujesz w opracowaniu?</h2>
+
+      <div class="sub-features">
+        <div class="sub-feature">
+          <div class="sub-feature-icon">-</div>
+          <div>
+            <strong>Wiedza potrzebna do danego zadania</strong>
+            <p>Każde opracowanie zawiera teorię bezpośrednio powiązaną z konkretnym zadaniem. Możesz po prostu rozwiązywać zadania - i przy okazji powtarzać materiał. Nie musisz otwierać podręcznika.</p>
+          </div>
+        </div>
+        <div class="sub-feature">
+          <div class="sub-feature-icon">-</div>
+          <div>
+            <strong>Siatka skojarzeń między działami</strong>
+            <p>Biologia na maturze często łączy kilka dziedzin naraz. Do wybranych zadań dorzucamy sugestie, co warto przy okazji powtórzyć - starannie dobrane tak, żeby tworzyć w Twojej głowie sieć powiązań, a nie zbiór oderwanych faktów.</p>
+          </div>
+        </div>
+        <div class="sub-feature">
+          <div class="sub-feature-icon">-</div>
+          <div>
+            <strong>Analiza klucza CKE - naucz się pisać pod klucz</strong>
+            <p>W zadaniach otwartych większość punktów gubi się nie przez brak wiedzy, ale przez złe sformułowanie odpowiedzi. Omawiamy klucze CKE szczegółowo. Zależnie od zadania wskazujemy konkretne słowa, na które zwracają uwagę egzaminatorzy, typowe pułapki i zasady budowania odpowiedzi. Jeśli tracisz punkty mimo że „wiesz” - to jest właśnie to, czego Ci brakuje.</p>
+          </div>
+        </div>
+        <div class="sub-feature">
+          <div class="sub-feature-icon">-</div>
+          <div>
+            <strong>Jak przenieść to na inne zadania</strong>
+            <p>Nie uczymy Cię jednego zadania. Przy każdym wyjaśnieniu pokazujemy mechanizm - ogólną zasadę, którą możesz zastosować do podobnych pytań w innych arkuszach.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- W planach: zadania autorskie -->
+    <div class="sub-section">
+      <p class="sub-soon-tag">W planach</p>
+      <h2 class="sub-section-title">Autorskie zadania maturalne</h2>
+      <p class="sub-section-lead">Przygotowujemy własne zadania maturalne o rozbudowanej treści, które - podobnie jak zadania CKE - sprawdzają umiejętność analizy tekstu.</p>
+      <p class="sub-section-lead">Każde z nich będzie miało pełne opracowanie, tak jak zadania z arkuszy. Zadania autorskie będą dostępne w ramach subskrypcji.</p>
+    </div>
+
+    <!-- Autor -->
+    <div class="sub-section sub-author-section">
+      <h2 class="sub-section-title">Napisane przez człowieka, który wie, jak myśli egzaminator</h2>
+      <p class="sub-section-lead">Każde opracowanie, każda analiza klucza CKE i każda wskazówka powstaje ręcznie. Nie generujemy treści AI.</p>
+      <p class="sub-section-lead">Pisze je ktoś, kto od kilku lat prowadzi korepetycje z maturzystami - i dokładnie wie, gdzie najczęściej tracą punkty mimo wiedzy.</p>
+      <p class="sub-section-lead">Chodzi o to, żebyś nie tylko „wiedział(a)”, ale też umiał(a) to napisać tak, jak oczekuje klucz.</p>
+      <div class="sub-author-card">
+        <img src="autor.jpg" alt="Jakub Dudek" class="sub-author-avatar">
+        <div class="sub-author-text">
+          <p class="sub-author-label">Autor opracowań</p>
+          <h3 class="sub-author-name">Jakub Dudek</h3>
+          <p class="sub-author-bio">Student IV roku kierunku lekarskiego na Uniwersytecie Medycznym w Poznaniu. Laureat 51. i finalista 52. Olimpiady Biologicznej. Założyciel i prowadzący Szkołę Komórki. Korepetytor z doświadczeniem w prowadzeniu zarówno zajęć grupowych, jak i indywidualnych. Korepetycje i kursy, licząc również te udzialne po znajomości kolegom i koleżankom w klasie maturalnej prowadzi już 5 rok.</p>
+          <p class="sub-author-note">Piszę tak, jak sam chciałbym dostać wyjaśnienie przed maturą - konkretnie, bez lania wody i z naciskiem na to, co naprawdę daje punkty.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transparentne użycie AI -->
+    <div class="sub-section">
+      <h2 class="sub-section-title">Transparentne użycie AI</h2>
+      <p class="sub-section-lead">Jak powstają treści i grafiki - dokładnie tak, jak jest.</p>
+
+      <div class="sub-features">
+        <div class="sub-feature">
+          <div class="sub-feature-icon">-</div>
+          <div>
+            <strong>Treści merytoryczne</strong>
+            <p>Treści merytoryczne (wyjaśnienia, analiza klucza CKE, wskazówki, schematy myślowe) - 100% napisane przez człowieka. Żadne AI nie tworzy opracowań. AI używamy wyłącznie do korekty językowej.</p>
+          </div>
+        </div>
+        <div class="sub-feature">
+          <div class="sub-feature-icon">-</div>
+          <div>
+            <strong>Grafiki i schematy</strong>
+            <p>Część to nasze własne, ręcznie rysowane schematy, część to istniejące materiały, które następnie edytujemy i dostosowujemy. AI pomaga nam w poprawianiu i dopracowywaniu tych grafik - nie generujemy ich „od zera” w stylu typowych AI-obrazków. Chodzi o czytelność i precyzję, a nie o efektowny wygląd.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── JAK ANULOWAĆ (pokazywane tylko gdy user ma subskrypcję) ── -->
+  <div id="jak-anulowac" class="sub-section hidden">
+    <h2 class="sub-section-title">Jak anulować subskrypcję?</h2>
+    <p class="sub-section-lead" style="font-size:13px">
+      Subskrypcją zarządzasz samodzielnie przez bezpieczny panel Stripe - możesz tam anulować odnowienie, zmienić metodę płatności lub pobrać faktury. Po anulowaniu dostęp do opracowań zostaje aktywny do końca już opłaconego okresu.
+    </p>
+    <div style="text-align:center;margin-top:16px">
+      <button class="btn btn-outline btn-sm" id="portal-btn" data-click="openBillingPortal">Zarządzaj subskrypcją / anuluj</button>
+    </div>
+  </div>
+
+  <!-- ── ZMIANA HASŁA (tylko dla zalogowanych) ── -->
+  <div id="konto-haslo" class="sub-section hidden">
+    <h2 class="sub-section-title">Zmień hasło</h2>
+    <form id="change-password-form" data-submit="handleChangePassword" style="max-width:380px;margin:16px auto 0">
+      <div id="pw-msg" class="form-message"></div>
+
+      <div class="form-group">
+        <label for="current-password">Obecne hasło</label>
+        <input type="password" id="current-password" class="form-input" required autocomplete="current-password">
+      </div>
+      <div class="form-group">
+        <label for="change-password">Nowe hasło</label>
+        <input type="password" id="change-password" class="form-input" placeholder="min. 8 znaków" required minlength="8" autocomplete="new-password">
+      </div>
+      <div class="form-group">
+        <label for="change-password2">Powtórz nowe hasło</label>
+        <input type="password" id="change-password2" class="form-input" required minlength="8" autocomplete="new-password">
+      </div>
+
+      <button type="submit" class="btn btn-outline" style="width:100%;justify-content:center">Zapisz nowe hasło</button>
+      <p style="font-size:12px;color:var(--text-muted);margin-top:12px;text-align:center">
+        Nie pamiętasz obecnego hasła albo logujesz się tylko linkiem z e-maila?
+        <button type="button" class="btn btn-ghost btn-sm" data-click="sendResetLink">Wyślij link do ustawienia hasła</button>
+      </p>
+    </form>
+  </div>
+
+</div>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="footer-brand">
+    <img src="logov2.png" alt="Szkoła Komórki">
+    <span>Szkoła Komórki</span>
+  </div>
+  <div class="footer-links">
+    <a href="baza.html">Baza zadań</a>
+    <a href="podrecznik.html">Podręcznik</a>
+    <a href="auth.html">Logowanie</a>
+    <a href="regulamin.html">Regulamin</a>
+    <a href="polityka-prywatnosci.html">Polityka prywatności</a>
+    <a href="polityka-prywatnosci.html#cookies">Cookies</a>
+    <a href="#" data-cookie-settings>Ustawienia cookies</a>
+  </div>
+  <p class="footer-copy">© <span id="year"></span> Szkoła Komórki</p>
+</footer>
+
+<script src="js/vendor/supabase-2.118.0.js"></script>
+<script src="js/config.js"></script>
+<script src="js/auth.js?v=7"></script>
+<script src="js/actions.js"></script>
+<script src="js/page-subscription.js?v=2"></script>
+<script src="js/cookie-consent.js?v=3"></script>
+</body>
+</html>

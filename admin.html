@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com https://connect.facebook.net https://www.clarity.ms https://scripts.clarity.ms; connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://www.facebook.com https://connect.facebook.net https://*.clarity.ms https://c.bing.com https://dtfkjtsjubfxsahrgkua.supabase.co; img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com https://www.facebook.com https://*.clarity.ms https://c.bing.com https://dtfkjtsjubfxsahrgkua.supabase.co https://maturabiolchem.pl; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <title>Panel administracyjny — Szkoła Komórki</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link href="js/vendor/quill-1.3.7.snow.css" rel="stylesheet">
+</head>
+<body style="background:var(--cream)">
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <img src="logov2.png" alt="Szkoła Komórki">
+      <span>Admin</span>
+    </a>
+    <div class="nav-actions">
+      <span id="user-email" class="nav-user"></span>
+      <a href="index.html" class="btn btn-outline btn-sm">← Strona główna</a>
+      <button id="auth-btn" class="btn btn-ghost btn-sm" data-click="signOut">Wyloguj</button>
+    </div>
+  </div>
+</nav>
+
+<div class="admin-layout">
+
+  <div class="admin-header">
+    <h1>Panel administracyjny</h1>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <a href="baza.html" class="btn btn-outline btn-sm">Podgląd bazy</a>
+      <a href="podrecznik.html" class="btn btn-outline btn-sm">Podgląd podręcznika</a>
+    </div>
+  </div>
+
+  <!-- ── FORM ── -->
+  <div class="admin-card">
+    <h2 id="form-title">Dodaj nowe zadanie</h2>
+    <p style="font-size:12px;color:var(--text-muted);margin:-14px 0 18px">
+      W każdym polu tekstowym (treść, klucz, opracowanie, podręcznik) możesz zaznaczyć fragment i kliknąć 🔗 w pasku narzędzi, żeby wstawić hiperłącze — na stronie zawsze otworzy się w nowej karcie.
+    </p>
+
+    <div id="form-msg" class="form-message"></div>
+
+    <form id="task-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="f-rok">Rok matury *</label>
+          <input type="number" id="f-rok" name="rok" class="form-input"
+                 placeholder="np. 2024" min="2000" max="2030" required>
+        </div>
+        <div class="form-group">
+          <label for="f-numer">Numer zadania *</label>
+          <input type="text" id="f-numer" name="numer_zadania" class="form-input"
+                 placeholder="np. 15 lub 15.1" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Treść zadania *</label>
+        <div class="ql-wrapper" id="ql-tresc-wrap">
+          <div id="ql-tresc"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Klucz CKE *</label>
+        <div class="ql-wrapper ql-wrapper--sm" id="ql-klucz-wrap">
+          <div id="ql-klucz"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Opracowanie (płatne)</label>
+        <div class="ql-wrapper" id="ql-opr-wrap">
+          <div id="ql-opr"></div>
+        </div>
+        <div class="form-hint">Pole widoczne tylko dla aktywnych subskrybentów.</div>
+      </div>
+
+      <div class="form-group">
+        <label>Typ zadania *</label>
+        <select name="typ" class="form-input" required>
+          <option value="otwarte">Otwarte</option>
+          <option value="zamkniete">Zamknięte</option>
+        </select>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="f-kategoria">Kategoria</label>
+          <select id="f-kategoria" name="kategoria" class="form-input">
+            <option value="">— bez kategorii —</option>
+            <option value="matura_maj">Matura maj</option>
+            <option value="matura_czerwiec">Matura czerwiec</option>
+            <option value="matura_kwiecien">Matura kwiecień (COVID)</option>
+            <option value="matura_lipiec">Matura lipiec (COVID)</option>
+            <option value="informator_cke">Informator CKE</option>
+            <option value="matura_dwujezyczna">Matura dwujęzyczna</option>
+            <option value="zadanie_autorskie">Zadanie autorskie</option>
+            <option value="matura_probna">Matura próbna</option>
+            <option value="inne">Inne</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="f-formula">Formuła</label>
+          <select id="f-formula" name="formula" class="form-input">
+            <option value="">— bez formuły —</option>
+            <option value="2007">Formuła 2007</option>
+            <option value="2015">Formuła 2015</option>
+            <option value="2023">Formuła 2023</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="f-poziom">Poziom</label>
+          <select id="f-poziom" name="poziom" class="form-input">
+            <option value="">— bez poziomu —</option>
+            <option value="rozszerzony" selected>Rozszerzony</option>
+            <option value="podstawowy">Podstawowy</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Działy biologii</label>
+        <div class="dzialy-picker" id="dzialy-picker"></div>
+        <div class="form-hint">Kliknij, żeby zaznaczyć (można wybrać kilka).</div>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button type="submit" class="btn">Dodaj zadanie</button>
+        <button type="button" id="btn-cancel-edit" class="btn btn-outline hidden" data-click="cancelEdit">Anuluj edycję</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- ── TASK LIST ── -->
+  <div class="admin-card">
+    <h2>Ostatnie zadania <small style="font-size:13px;font-family:var(--font-mono);color:var(--text-muted)">(ostatnie 50)</small></h2>
+    <div id="admin-task-list">
+      <p style="color:var(--text-muted);font-size:13px">Ładowanie…</p>
+    </div>
+
+    <div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(42,71,44,.1)">
+      <p style="font-family:var(--font-mono);font-size:12px;color:var(--text-muted)">
+        Po dodaniu zadań uruchom skrypt <code>node generate-static.js</code> i wypchnij wygenerowane pliki do repo, żeby zaktualizować statyczne strony SEO.
+      </p>
+    </div>
+  </div>
+
+  <!-- ── PODRĘCZNIK: FORM ── -->
+  <div class="admin-card">
+    <h2 id="podr-form-title">Dodaj zagadnienie do podręcznika</h2>
+
+    <div id="podr-form-msg" class="form-message"></div>
+
+    <form id="podr-form">
+      <div class="form-group">
+        <label for="podr-tytul">Tytuł zagadnienia *</label>
+        <input type="text" id="podr-tytul" name="tytul" class="form-input"
+               placeholder="np. Budowa błony komórkowej" required>
+      </div>
+
+      <div class="form-group">
+        <label>Działy biologii *</label>
+        <div class="dzialy-picker" id="dzialy-picker-podr"></div>
+        <div class="form-hint">Kliknij, żeby zaznaczyć (można wybrać kilka).</div>
+      </div>
+
+      <div class="form-group">
+        <label>Treść zagadnienia (płatna) *</label>
+        <div class="ql-wrapper" id="ql-podr-wrap">
+          <div id="ql-podr"></div>
+        </div>
+        <div class="form-hint">Widoczna tylko dla aktywnych subskrybentów — ta sama subskrypcja co opracowania zadań.</div>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button type="submit" class="btn">Dodaj zagadnienie</button>
+        <button type="button" id="btn-cancel-edit-podr" class="btn btn-outline hidden" data-click="cancelEditPodr">Anuluj edycję</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- ── PODRĘCZNIK: LIST ── -->
+  <div class="admin-card">
+    <h2>Zagadnienia w podręczniku <small style="font-size:13px;font-family:var(--font-mono);color:var(--text-muted)">(ostatnie 50)</small></h2>
+    <div id="admin-podrecznik-list">
+      <p style="color:var(--text-muted);font-size:13px">Ładowanie…</p>
+    </div>
+
+    <div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(42,71,44,.1)">
+      <p style="font-family:var(--font-mono);font-size:12px;color:var(--text-muted)">
+        „Kopiuj link" tworzy stały link do zagadnienia (<code>podrecznik.html?z=ID</code>). Wklej go jako hiperłącze
+        (przycisk 🔗 w pasku narzędzi edytora) w treści opracowania zadania — paywall podręcznika obowiązuje niezależnie od tego, skąd ktoś trafi na stronę.
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<!-- Popup: wstaw tabelę -->
+<div id="ql-table-popup" class="ql-answer-popup">
+  <div class="ql-answer-popup-title">Wstaw tabelę</div>
+  <div class="ql-table-dim-grid">
+    <div>
+      <div class="ql-answer-popup-hint">Wiersze</div>
+      <div class="ql-answer-popup-row">
+        <button class="ql-answer-step-btn" data-click="changeTableDim" data-dim="rows" data-delta="-1">−</button>
+        <span id="ql-table-rows" class="ql-answer-count-val">3</span>
+        <button class="ql-answer-step-btn" data-click="changeTableDim" data-dim="rows" data-delta="1">+</button>
+      </div>
+    </div>
+    <div>
+      <div class="ql-answer-popup-hint">Kolumny</div>
+      <div class="ql-answer-popup-row">
+        <button class="ql-answer-step-btn" data-click="changeTableDim" data-dim="cols" data-delta="-1">−</button>
+        <span id="ql-table-cols" class="ql-answer-count-val">3</span>
+        <button class="ql-answer-step-btn" data-click="changeTableDim" data-dim="cols" data-delta="1">+</button>
+      </div>
+    </div>
+  </div>
+  <div class="ql-answer-popup-hint" style="font-size:10px;opacity:.7">Scalanie: zaznacz komórki → prawy klik</div>
+  <div class="ql-answer-popup-actions">
+    <button class="btn btn-sm" data-click="confirmInsertTable">Wstaw</button>
+    <button class="btn btn-outline btn-sm" data-click="closeTablePopup">Anuluj</button>
+  </div>
+</div>
+
+<!-- Popup: wybór liczby wierszy odpowiedzi -->
+<div id="ql-answer-popup" class="ql-answer-popup">
+  <div class="ql-answer-popup-title">Linie odpowiedzi</div>
+  <div class="ql-answer-popup-row">
+    <button class="ql-answer-step-btn" data-click="changeAnswerRows" data-delta="-1">−</button>
+    <span id="ql-answer-count" class="ql-answer-count-val">3</span>
+    <button class="ql-answer-step-btn" data-click="changeAnswerRows" data-delta="1">+</button>
+    <span class="ql-answer-popup-hint">wierszy</span>
+  </div>
+  <div class="ql-answer-popup-actions">
+    <button class="btn btn-sm" data-click="confirmAnswerLines">Wstaw</button>
+    <button class="btn btn-outline btn-sm" data-click="closeAnswerLinesPopup">Anuluj</button>
+  </div>
+</div>
+
+<script src="js/vendor/supabase-2.118.0.js"></script>
+<script src="js/vendor/quill-1.3.7.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/auth.js?v=7"></script>
+<script src="js/actions.js"></script>
+<script src="js/admin.js?v=2"></script>
+<script src="js/page-admin.js?v=1"></script>
+<script src="js/cookie-consent.js?v=3"></script>
+</body>
+</html>

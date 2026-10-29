@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com https://connect.facebook.net https://www.clarity.ms https://scripts.clarity.ms; connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://www.facebook.com https://connect.facebook.net https://*.clarity.ms https://c.bing.com https://dtfkjtsjubfxsahrgkua.supabase.co; img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com https://www.facebook.com https://*.clarity.ms https://c.bing.com https://dtfkjtsjubfxsahrgkua.supabase.co https://maturabiolchem.pl; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <title>Logowanie — Szkoła Komórki</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="form-page">
+
+<div class="form-card">
+  <div class="form-card-logo">
+    <img src="logov2.png" alt="Szkoła Komórki">
+    <span>Szkoła Komórki</span>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" id="tab-login"    data-click="switchTab" data-tab="login">Zaloguj się</button>
+    <button class="tab-btn"        id="tab-register" data-click="switchTab" data-tab="register">Zarejestruj się</button>
+  </div>
+
+  <div id="form-msg" class="form-message"></div>
+
+  <!-- ── LOGIN FORM ── -->
+  <form id="login-form" data-submit="handleLogin">
+    <h1>Witaj z powrotem</h1>
+    <p>Zaloguj się, aby zobaczyć opracowania do zadań.</p>
+
+    <div class="form-group">
+      <label for="login-email">E-mail</label>
+      <input type="email" id="login-email" class="form-input" placeholder="twoj@email.pl" required autocomplete="email">
+    </div>
+
+    <div class="form-group">
+      <label for="login-password">Hasło</label>
+      <input type="password" id="login-password" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+    </div>
+
+    <div style="text-align:right;margin:-6px 0 16px">
+      <button type="button" class="btn btn-ghost btn-sm" data-click="handleForgotPassword">Nie pamiętam hasła</button>
+    </div>
+
+    <button type="submit" class="btn" style="width:100%;justify-content:center">Zaloguj się</button>
+
+    <div class="form-divider">lub</div>
+
+    <button type="button" class="btn btn-outline" style="width:100%;justify-content:center" data-click="handleMagicLink">
+      Zaloguj przez link e-mail
+    </button>
+  </form>
+
+  <!-- ── REGISTER FORM ── -->
+  <form id="register-form" data-submit="handleRegister" style="display:none">
+    <h1>Utwórz konto</h1>
+    <p>Bezpłatne konto daje dostęp do treści zadań i kluczy CKE.</p>
+
+    <div class="form-group">
+      <label for="reg-email">E-mail</label>
+      <input type="email" id="reg-email" class="form-input" placeholder="twoj@email.pl" required autocomplete="email">
+    </div>
+
+    <div class="form-group">
+      <label for="reg-password">Hasło</label>
+      <input type="password" id="reg-password" class="form-input" placeholder="min. 8 znaków" required minlength="8" autocomplete="new-password">
+    </div>
+
+    <button type="submit" class="btn" style="width:100%;justify-content:center">Utwórz konto</button>
+  </form>
+
+  <!-- ── NOWE HASŁO (po kliknięciu w link z e-maila „Nie pamiętam hasła”) ── -->
+  <form id="recovery-form" data-submit="handleNewPassword" style="display:none">
+    <h1>Ustaw nowe hasło</h1>
+    <p>Wpisz nowe hasło do swojego konta.</p>
+
+    <div class="form-group">
+      <label for="new-password">Nowe hasło</label>
+      <input type="password" id="new-password" class="form-input" placeholder="min. 8 znaków" required minlength="8" autocomplete="new-password">
+    </div>
+
+    <div class="form-group">
+      <label for="new-password2">Powtórz nowe hasło</label>
+      <input type="password" id="new-password2" class="form-input" placeholder="min. 8 znaków" required minlength="8" autocomplete="new-password">
+    </div>
+
+    <button type="submit" class="btn" style="width:100%;justify-content:center">Zapisz nowe hasło</button>
+  </form>
+
+  <div class="form-footer mt-16">
+    <a href="baza.html">← Wróć do bazy zadań</a>
+  </div>
+</div>
+
+<script src="js/vendor/supabase-2.118.0.js"></script>
+<script src="js/config.js"></script>
+<script src="js/auth.js?v=7"></script>
+<script src="js/actions.js"></script>
+<script src="js/page-auth.js?v=2"></script>
+<script src="js/cookie-consent.js?v=3"></script>
+</body>
+</html>

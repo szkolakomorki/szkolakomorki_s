@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com https://connect.facebook.net https://www.clarity.ms https://scripts.clarity.ms; connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://www.facebook.com https://connect.facebook.net https://*.clarity.ms https://c.bing.com https://dtfkjtsjubfxsahrgkua.supabase.co; img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com https://www.facebook.com https://*.clarity.ms https://c.bing.com https://dtfkjtsjubfxsahrgkua.supabase.co https://maturabiolchem.pl; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="canonical" href="https://szkolakomorki.pl/podrecznik.html">
+  <title>Podręcznik biologii — Szkoła Komórki</title>
+  <meta name="description" content="Podręcznik biologii na maturę — zagadnienia teoretyczne pogrupowane według działów. Pełna treść dostępna w ramach subskrypcji.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=5">
+</head>
+<body>
+
+<!-- ── NAVIGATION ── -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-brand">
+      <img src="logov2.png" alt="Szkoła Komórki">
+      <span>Podręcznik</span>
+      <small>biologia na maturę</small>
+    </a>
+    <div class="nav-actions">
+      <span id="user-email" class="nav-user"></span>
+      <span id="sub-badge" class="nav-sub-badge hidden">Dostęp aktywny</span>
+      <a href="baza.html" class="btn btn-outline btn-sm">Baza zadań</a>
+      <a id="sub-btn" href="subscription.html" class="btn btn-clay btn-sm">Odblokuj podręcznik</a>
+      <a id="auth-btn" href="auth.html" class="btn btn-outline btn-sm">Zaloguj się</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <h1>Podręcznik <em>biologii</em></h1>
+  <p>Zagadnienia teoretyczne pogrupowane według działów. Tytuły są zawsze widoczne — pełna treść odblokowuje się w ramach tej samej subskrypcji, co opracowania zadań.</p>
+</section>
+
+<!-- ── MAIN LAYOUT ── -->
+<div class="app-layout">
+
+  <!-- ── FILTERS ── -->
+  <div>
+    <button class="filters-toggle" data-click="toggleMobileFiltersPodr">
+      <span>Działy</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+    </button>
+
+    <div class="filters-panel" id="filters-panel-podr">
+      <h2>Działy biologii</h2>
+      <div class="filter-group">
+        <div id="filter-dzialy-podr"></div>
+      </div>
+      <div id="active-filters-podr" class="active-filters" style="display:none"></div>
+      <button class="btn-clear-filters" data-click="clearFiltersPodr">Wyczyść filtry</button>
+    </div>
+  </div>
+
+  <!-- ── HANDBOOK LIST ── -->
+  <main class="main-content">
+    <div class="results-header">
+      <span class="results-count" id="results-count-podr">Ładowanie…</span>
+    </div>
+
+    <div id="podrecznik-list" class="podr-list">
+      <div class="state-loading">
+        <div class="spinner"></div>
+        <p>Ładowanie podręcznika…</p>
+      </div>
+    </div>
+  </main>
+
+</div>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="footer-brand">
+    <img src="logov2.png" alt="Szkoła Komórki">
+    <span>Szkoła Komórki</span>
+  </div>
+  <div class="footer-links">
+    <a href="baza.html">Baza zadań</a>
+    <a href="podrecznik.html">Podręcznik</a>
+    <a href="auth.html">Logowanie</a>
+    <a href="subscription.html">Subskrypcja</a>
+    <a href="regulamin.html">Regulamin</a>
+    <a href="polityka-prywatnosci.html">Polityka prywatności</a>
+    <a href="polityka-prywatnosci.html#cookies">Cookies</a>
+    <a href="#" data-cookie-settings>Ustawienia cookies</a>
+  </div>
+  <p class="footer-copy">© <span id="year"></span> Szkoła Komórki.</p>
+</footer>
+
+<!-- ── SCRIPTS ── -->
+<script src="js/vendor/supabase-2.118.0.js"></script>
+<script src="js/vendor/purify-3.4.17.min.js"></script>
+<script src="js/config.js?v=5"></script>
+<script src="js/safe-html.js?v=2"></script>
+<script src="js/auth.js?v=7"></script>
+<script src="js/actions.js"></script>
+<script src="js/podrecznik.js?v=7"></script>
+<script src="js/page-podrecznik.js?v=1"></script>
+<script src="js/cookie-consent.js?v=3"></script>
+</body>
+</html>
