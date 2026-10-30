@@ -16,6 +16,20 @@ function showCheckoutMsg(text, type) {
   el.className = 'form-message ' + type;
 }
 
+// _fbp/_fbc istnieją tylko po zgodzie marketingowej; dodatkowo sprawdzamy zapisaną zgodę.
+function getMetaCookies() {
+  try {
+    const consent = JSON.parse(localStorage.getItem('sk_cookie_consent') || 'null');
+    if (!consent || !consent.marketing) return {};
+  } catch (_) { return {}; }
+  const get = (n) => (document.cookie.match(new RegExp('(?:^|; )' + n + '=([^;]*)')) || [])[1];
+  const out = {};
+  const fbp = get('_fbp'), fbc = get('_fbc');
+  if (fbp) out.fbp = decodeURIComponent(fbp);
+  if (fbc) out.fbc = decodeURIComponent(fbc);
+  return out;
+}
+
 async function startCheckout() {
   const session = await getSession();
   if (!session) {
@@ -29,8 +43,9 @@ async function startCheckout() {
   showCheckoutMsg('', '');
 
   // Serwer sam dobiera cenę i adresy powrotu — klient podaje tylko plan
+  // (+ cookies Meta, wyłącznie gdy jest zgoda marketingowa — do Conversions API)
   const { data: fnData, error: fnError } = await _supabase.functions.invoke('create-checkout', {
-    body: { plan: selectedPlan === 'annual' ? 'annual' : 'monthly' },
+    body: { plan: selectedPlan === 'annual' ? 'annual' : 'monthly', ...getMetaCookies() },
   });
 
   if (fnError || !fnData?.url) {
