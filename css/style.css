@@ -867,6 +867,12 @@ a:hover { text-decoration: underline; }
   color: var(--text-muted);
 }
 
+/* Zadanie autorskie bez subskrypcji: ucięty początek treści z wygaszeniem na dole */
+.zadanie-tresc--podglad {
+  -webkit-mask-image: linear-gradient(to bottom, #000 75%, transparent);
+          mask-image: linear-gradient(to bottom, #000 75%, transparent);
+}
+
 .opracowanie-brak,
 .opracowanie-loading {
   font-size: 13px;
