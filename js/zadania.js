@@ -65,7 +65,7 @@ async function fetchZadania() {
 
   let query = _supabase
     .from('zadania_z_dostepem')
-    .select('id, rok, numer_zadania, tresc_zadania, klucz_cke, dzialy, typ, kategoria, formula, poziom, data_dodania, ma_opracowanie', { count: 'exact' })
+    .select('id, rok, numer_zadania, tresc_zadania, klucz_cke, dzialy, typ, kategoria, formula, poziom, data_dodania, ma_opracowanie, zablokowane, tresc_obcieta', { count: 'exact' })
     .order('rok', { ascending: false })
     .order('numer_zadania_sort', { ascending: true, nullsFirst: false })
     .order('numer_zadania', { ascending: true })
@@ -185,8 +185,32 @@ function renderMetaBadges(z) {
   return parts.length ? `<div class="meta-badges">${parts.join('')}</div>` : '';
 }
 
+// Zadanie autorskie bez subskrypcji: baza oddaje tylko początek treści (patrz
+// migration_zadania_autorskie_paywall.sql) — reszta, klucz i opracowanie są za paywallem.
+function renderAutorskiePaywall(z) {
+  const blurText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.';
+  const co = z.tresc_obcieta
+    ? 'Dalsza część zadania, klucz odpowiedzi i opracowanie'
+    : 'Klucz odpowiedzi i opracowanie';
+
+  return `
+    <div class="zadanie-section opracowanie-section">
+      <div class="zadanie-section-label">${z.tresc_obcieta ? 'Dalsza część, klucz i opracowanie' : 'Klucz i opracowanie'}</div>
+      <div class="opracowanie-locked">
+        <div class="opracowanie-blur-text">${blurText}</div>
+        <div class="opracowanie-overlay">
+          <div class="opracowanie-overlay-icon">🔒</div>
+          <div class="opracowanie-overlay-text">${co} są dostępne w ramach subskrypcji</div>
+          <div class="opracowanie-overlay-sub">Zadanie autorskie</div>
+          <a href="subscription.html" class="btn btn-clay btn-sm mt-8">Odblokuj dostęp</a>
+        </div>
+      </div>
+    </div>`;
+}
+
 function renderZadanieCard(z) {
   const slug = buildSlug(z);
+  const locked = !!z.zablokowane;
   const hasOpr = !!z.ma_opracowanie;
 
   return `
@@ -209,11 +233,12 @@ function renderZadanieCard(z) {
 
       <div class="zadanie-section">
         <div class="zadanie-section-label">Treść zadania</div>
-        <div class="zadanie-tresc rich-content">${safeHtml(z.tresc_zadania)}</div>
+        <div class="zadanie-tresc rich-content${z.tresc_obcieta ? ' zadanie-tresc--podglad' : ''}">${safeHtml(z.tresc_zadania)}</div>
       </div>
 
+      ${locked ? renderAutorskiePaywall(z) : `
       <div class="zadanie-section klucz-collapsed" id="klucz-${z.id}">
-        <div class="zadanie-section-label">Klucz CKE</div>
+        <div class="zadanie-section-label">${z.kategoria === 'zadanie_autorskie' ? 'Klucz odpowiedzi' : 'Klucz CKE'}</div>
         <button class="klucz-toggle" data-click="toggleKlucz" data-id="${escHtml(z.id)}">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
           Pokaż klucz odpowiedzi
@@ -221,7 +246,7 @@ function renderZadanieCard(z) {
         <div class="klucz-body zadanie-klucz rich-content">${safeHtml(z.klucz_cke)}</div>
       </div>
 
-      ${renderOpracowanie(z)}
+      ${renderOpracowanie(z)}`}
     </article>`;
 }
 
