@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com https://connect.facebook.net https://www.clarity.ms https://scripts.clarity.ms; connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://www.facebook.com https://connect.facebook.net https://*.clarity.ms https://c.bing.com https://dtfkjtsjubfxsahrgkua.supabase.co; img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com https://www.facebook.com https://*.clarity.ms https://c.bing.com https://dtfkjtsjubfxsahrgkua.supabase.co https://maturabiolchem.pl; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <title>Rozpocznij trial — Szkoła Komórki</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=9">
+</head>
+<body class="form-page">
+
+<div class="form-card">
+  <div class="form-card-logo">
+    <img src="logov2.png" alt="Szkoła Komórki">
+    <span>Szkoła Komórki</span>
+  </div>
+
+  <div id="form-msg" class="form-message"></div>
+
+  <!-- ── WYBÓR PLANU (widoczny dla zalogowanych — także po kliknięciu w link z e-maila) ── -->
+  <div id="step-plan" style="display:none">
+    <h1>Wybierz plan</h1>
+    <p id="plan-lead">Zaczynasz od 3 dni za darmo. Anulujesz w każdej chwili.</p>
+
+    <div class="as-plans">
+      <div class="as-plan selected" id="as-plan-monthly" data-click="pickPlan" data-plan="monthly">
+        <span class="as-plan-name">Miesięczny</span>
+        <span class="as-plan-price">15 zł <small>/ miesiąc</small></span>
+      </div>
+      <div class="as-plan" id="as-plan-annual" data-click="pickPlan" data-plan="annual">
+        <span class="as-plan-badge">−50%</span>
+        <span class="as-plan-name">Roczny</span>
+        <span class="as-plan-price">90 zł <small>/ rok</small></span>
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-clay as-cta" id="pay-btn" data-click="goToStripe">Przejdź do płatności →</button>
+    <p class="as-fine">Bezpieczna płatność przez Stripe. Pierwsze 3 dni bezpłatnie.</p>
+  </div>
+
+  <!-- ── REJESTRACJA ── -->
+  <form id="register-form" data-submit="handleRegister" style="display:none">
+    <h1>Odbierz 3 dni za darmo</h1>
+    <p>Załóż konto, a od razu przejdziesz do płatności. Karta jest potrzebna tylko do uruchomienia trialu - możesz anulować przed jego końcem.</p>
+
+    <div class="as-summary" id="reg-summary"></div>
+
+    <div class="form-group">
+      <label for="reg-email">E-mail</label>
+      <input type="email" id="reg-email" class="form-input" placeholder="twoj@email.pl" required autocomplete="email">
+    </div>
+
+    <div class="form-group">
+      <label for="reg-password">Hasło</label>
+      <input type="password" id="reg-password" class="form-input" placeholder="min. 8 znaków" required minlength="8" autocomplete="new-password">
+    </div>
+
+    <button type="submit" class="btn btn-clay as-cta">Zarejestruj się i odbierz 3 dni za darmo →</button>
+    <p class="as-fine">
+      Rejestrując się, akceptujesz <a href="regulamin.html">Regulamin</a> i potwierdzasz zapoznanie się z
+      <a href="polityka-prywatnosci.html">Polityką prywatności</a>.
+    </p>
+
+    <div class="form-footer mt-16">
+      Masz już konto? <a href="#" data-click="showLogin">Zaloguj się</a>
+    </div>
+  </form>
+
+  <!-- ── LOGOWANIE ── -->
+  <form id="login-form" data-submit="handleLogin" style="display:none">
+    <h1>Witaj z powrotem</h1>
+    <p>Zaloguj się i przejdź do płatności.</p>
+
+    <div class="as-summary" id="login-summary"></div>
+
+    <div class="form-group">
+      <label for="login-email">E-mail</label>
+      <input type="email" id="login-email" class="form-input" placeholder="twoj@email.pl" required autocomplete="email">
+    </div>
+
+    <div class="form-group">
+      <label for="login-password">Hasło</label>
+      <input type="password" id="login-password" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+    </div>
+
+    <div style="text-align:right;margin:-6px 0 16px">
+      <button type="button" class="btn btn-ghost btn-sm" data-click="handleForgotPassword">Nie pamiętam hasła</button>
+    </div>
+
+    <button type="submit" class="btn btn-clay as-cta">Zaloguj się i przejdź dalej →</button>
+
+    <div class="form-footer mt-16">
+      Nie masz konta? <a href="#" data-click="showRegister">Zarejestruj się</a>
+    </div>
+  </form>
+
+  <!-- ── PO REJESTRACJI: POTWIERDŹ E-MAIL ── -->
+  <div id="step-confirm" style="display:none">
+    <h1>Sprawdź skrzynkę</h1>
+    <p>Wysłaliśmy link na <strong id="confirm-email"></strong>. Kliknij go, a wrócisz tutaj i od razu przejdziesz do płatności - bez ponownego logowania.</p>
+    <p class="as-fine">Nie widzisz wiadomości? Zajrzyj do spamu.</p>
+  </div>
+
+  <div class="form-footer mt-16">
+    <a href="subscription.html">← Wróć do cennika</a>
+  </div>
+</div>
+
+<script src="js/vendor/supabase-2.118.0.js"></script>
+<script src="js/config.js"></script>
+<script src="js/auth.js?v=8"></script>
+<script src="js/actions.js"></script>
+<script src="js/page-auth-sub.js"></script>
+<script src="js/cookie-consent.js?v=3"></script>
+</body>
+</html>
