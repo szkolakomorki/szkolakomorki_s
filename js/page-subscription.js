@@ -8,6 +8,8 @@ function selectPlan(plan) {
   selectedPlan = plan;
   document.getElementById('plan-monthly').classList.toggle('selected', plan === 'monthly');
   document.getElementById('plan-annual').classList.toggle('selected',  plan === 'annual');
+  const loginLink = document.getElementById('login-link');
+  if (loginLink) loginLink.href = 'auth_sub.html?mode=login&plan=' + plan;
 }
 
 function showCheckoutMsg(text, type) {
@@ -16,24 +18,28 @@ function showCheckoutMsg(text, type) {
   el.className = 'form-message ' + type;
 }
 
-// _fbp/_fbc istnieją tylko po zgodzie marketingowej; dodatkowo sprawdzamy zapisaną zgodę.
-function getMetaCookies() {
-  try {
-    const consent = JSON.parse(localStorage.getItem('sk_cookie_consent') || 'null');
-    if (!consent || !consent.marketing) return {};
-  } catch (_) { return {}; }
-  const get = (n) => (document.cookie.match(new RegExp('(?:^|; )' + n + '=([^;]*)')) || [])[1];
-  const out = {};
-  const fbp = get('_fbp'), fbc = get('_fbc');
-  if (fbp) out.fbp = decodeURIComponent(fbp);
-  if (fbc) out.fbc = decodeURIComponent(fbc);
-  return out;
+const CHECKOUT_LABEL = 'Zacznij 3-dniowy trial →';
+const REGISTER_LABEL = 'Zarejestruj się i odbierz 3 dni za darmo →';
+
+// Klik w kartę: pierwszy wybiera plan, kolejny (w już wybraną kartę) przechodzi dalej —
+// do Stripe (zalogowany) albo do rejestracji (niezalogowany).
+function onPlanClick(plan) {
+  if (plan === selectedPlan) {
+    startCheckout();
+    return;
+  }
+  selectPlan(plan);
+  // Wyeksponuj przycisk zakupu
+  const btn = document.getElementById('checkout-btn');
+  btn.classList.remove('cta-pulse');
+  void btn.offsetWidth; // restart animacji
+  btn.classList.add('cta-pulse');
 }
 
 async function startCheckout() {
   const session = await getSession();
   if (!session) {
-    window.location.href = 'auth.html?redirect=subscription.html';
+    window.location.href = 'auth_sub.html?plan=' + selectedPlan;
     return;
   }
 
@@ -42,27 +48,15 @@ async function startCheckout() {
   btn.textContent = 'Przekierowywanie do Stripe…';
   showCheckoutMsg('', '');
 
-  // Serwer sam dobiera cenę i adresy powrotu — klient podaje tylko plan
-  // (+ cookies Meta, wyłącznie gdy jest zgoda marketingowa — do Conversions API)
-  const { data: fnData, error: fnError } = await _supabase.functions.invoke('create-checkout', {
-    body: { plan: selectedPlan === 'annual' ? 'annual' : 'monthly', ...getMetaCookies() },
-  });
-
-  if (fnError || !fnData?.url) {
-    let msg = 'Błąd podczas tworzenia sesji płatności. Spróbuj ponownie.';
-    try {
-      const detail = await fnError?.context?.json?.();
-      if (detail?.code === 'already_subscribed') {
-        msg = 'Masz już aktywną subskrypcję. Zarządzaj nią przyciskiem „Zarządzaj subskrypcją”.';
-      }
-    } catch (_) {}
-    showCheckoutMsg(msg, 'error');
+  const res = await createCheckoutSession(selectedPlan);
+  if (!res.url) {
+    showCheckoutMsg(res.error, 'error');
     btn.disabled = false;
-    btn.textContent = 'Zacznij 3-dniowy trial →';
+    btn.textContent = CHECKOUT_LABEL;
     return;
   }
 
-  window.location.href = fnData.url;
+  window.location.href = res.url;
 }
 
 async function openBillingPortal() {
@@ -149,7 +143,7 @@ async function initSubscriptionPage() {
 
   if (!session) {
     document.getElementById('login-cta').classList.remove('hidden');
-    document.getElementById('checkout-btn').classList.add('hidden');
+    document.getElementById('checkout-btn').textContent = REGISTER_LABEL;
     const authBtn = document.getElementById('auth-btn');
     if (authBtn) authBtn.textContent = 'Zaloguj się';
     return;
@@ -192,7 +186,7 @@ async function initSubscriptionPage() {
 }
 
 registerActions({
-  selectPlan:       (el) => selectPlan(el.dataset.plan),
+  selectPlan:       (el) => onPlanClick(el.dataset.plan),
   startCheckout:    () => startCheckout(),
   openBillingPortal: () => openBillingPortal(),
   handleChangePassword: (_el, e) => handleChangePassword(e),

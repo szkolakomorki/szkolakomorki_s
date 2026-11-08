@@ -53,6 +53,41 @@ async function hasActiveSubscription() {
   return !!data;
 }
 
+// _fbp/_fbc istnieją tylko po zgodzie marketingowej; dodatkowo sprawdzamy zapisaną zgodę.
+function getMetaCookies() {
+  try {
+    const consent = JSON.parse(localStorage.getItem('sk_cookie_consent') || 'null');
+    if (!consent || !consent.marketing) return {};
+  } catch (_) { return {}; }
+  const get = (n) => (document.cookie.match(new RegExp('(?:^|; )' + n + '=([^;]*)')) || [])[1];
+  const out = {};
+  const fbp = get('_fbp'), fbc = get('_fbc');
+  if (fbp) out.fbp = decodeURIComponent(fbp);
+  if (fbc) out.fbc = decodeURIComponent(fbc);
+  return out;
+}
+
+// Tworzy sesję Stripe Checkout dla zalogowanego usera. Zwraca { url } albo { error, alreadySubscribed }.
+// Serwer sam dobiera cenę i adresy powrotu — klient podaje tylko plan
+// (+ cookies Meta, wyłącznie gdy jest zgoda marketingowa — do Conversions API)
+async function createCheckoutSession(plan) {
+  const { data, error } = await _supabase.functions.invoke('create-checkout', {
+    body: { plan: plan === 'annual' ? 'annual' : 'monthly', ...getMetaCookies() },
+  });
+  if (!error && data?.url) return { url: data.url };
+
+  let msg = 'Błąd podczas tworzenia sesji płatności. Spróbuj ponownie.';
+  let alreadySubscribed = false;
+  try {
+    const detail = await error?.context?.json?.();
+    if (detail?.code === 'already_subscribed') {
+      alreadySubscribed = true;
+      msg = 'Masz już aktywną subskrypcję. Zarządzaj nią przyciskiem „Zarządzaj subskrypcją”.';
+    }
+  } catch (_) {}
+  return { error: msg, alreadySubscribed };
+}
+
 // Aktualizuje nawigację na podstawie stanu sesji
 async function updateNavAuth(opts = {}) {
   const session = await getSession();
