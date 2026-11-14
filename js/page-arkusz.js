@@ -15,12 +15,6 @@
   var ENDPOINT = 'https://assets.mailerlite.com/jsonp/' + ML_ACCOUNT_ID + '/forms/' + ML_FORM_ID + '/subscribe';
   var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-  function track(eventName) {
-    // fbq/gtag istnieją tylko po zgodzie w banerze cookies (cookie-consent.js)
-    try { if (window.fbq) window.fbq('track', 'Lead'); } catch (_) {}
-    try { if (window.gtag) window.gtag('event', eventName); } catch (_) {}
-  }
-
   function showError(form, text) {
     var box = form.querySelector('.ar-msg');
     box.textContent = text;
@@ -32,11 +26,13 @@
     box.className = 'ar-msg';
   }
 
-  function showSuccess(form, email) {
-    var card = form.closest('.ar-form-card');
-    form.querySelector('.js-email').textContent = email;
-    card.classList.remove('is-busy');
-    card.classList.add('is-done');
+  // Po zapisie przechodzimy na stronę „dziękujemy”. E-mail przekazujemy przez sessionStorage (nie w adresie URL).
+  function goToThanks(email) {
+    try {
+      sessionStorage.setItem('ar_email', email);
+      sessionStorage.setItem('ar_lead_pending', '1');
+    } catch (_) {}
+    window.location.href = 'arkusz-pobierz.html';
   }
 
   function subscribe(email) {
@@ -69,13 +65,12 @@
       return;
     }
     // Pułapka na boty: człowiek nie widzi tego pola
-    if (form.elements.website.value) { showSuccess(form, email); return; }
+    if (form.elements.website.value) { goToThanks(email); return; }
 
     card.classList.add('is-busy');
     subscribe(email).then(function (res) {
       if (res && res.success) {
-        track('generate_lead');
-        showSuccess(form, email);
+        goToThanks(email);
         return;
       }
       card.classList.remove('is-busy');

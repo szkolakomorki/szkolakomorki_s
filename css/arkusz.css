@@ -218,3 +218,9 @@
 @media (prefers-reduced-motion: reduce) {
   .ar-sticky, .dl-next-card { transition: none; }
 }
+
+/* Strona „dziękujemy” — wskazówki, gdy brak maila */
+.dl-trouble { margin-top: 22px; padding: 16px 18px; background: var(--cream); border: 1px dashed rgba(42,71,44,.4); border-radius: var(--radius-s); text-align: left; font-size: 14.5px; color: #3a4a3c; }
+.dl-trouble ol { margin: 8px 0 0 20px; }
+.dl-trouble li { margin-bottom: 6px; }
+.dl-trouble a { text-decoration: underline; font-weight: 600; }
