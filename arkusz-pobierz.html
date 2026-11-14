@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="
+  default-src 'self';
+  script-src 'self' https://www.googletagmanager.com https://connect.facebook.net https://www.facebook.com https://www.clarity.ms https://scripts.clarity.ms;
+  connect-src 'self'
+    https://www.googletagmanager.com
+    https://*.google-analytics.com
+    https://*.analytics.google.com
+    https://www.facebook.com
+    https://connect.facebook.net
+    https://*.facebook.com
+    https://graph.facebook.com
+    https://api.facebook.com
+    https://*.clarity.ms
+    https://c.bing.com;
+  img-src 'self' data:
+    https://www.googletagmanager.com
+    https://*.google-analytics.com
+    https://www.facebook.com
+    https://*.clarity.ms
+    https://c.bing.com;
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+  font-src 'self' data: https://fonts.gstatic.com;
+  object-src 'none';
+  base-uri 'self';
+  form-action 'self'
+">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <title>Pobierz darmowy arkusz - Szkoła Komórki</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=8">
+  <link rel="stylesheet" href="css/arkusz.css?v=1">
+</head>
+<body>
+
+<header class="ar-top">
+  <div class="ar-wrap ar-top-inner">
+    <a href="arkusz.html" class="ar-brand">
+      <img src="logov2.png" alt="">
+      <span>Szkoła Komórki</span>
+    </a>
+  </div>
+</header>
+
+<main>
+  <section class="dl-card">
+    <div class="dl-check" aria-hidden="true">✓</div>
+    <h1>Zapis potwierdzony. Arkusz jest Twój!</h1>
+    <p>Dziękuję, że jesteś z nami. Poniżej pobierzesz darmowy arkusz - ten sam link znajdziesz też w mailu powitalnym.</p>
+    <a id="dl-btn" class="btn btn-clay dl-btn" href="materialy/arkusz-biologia-a4d0dd9a3987.pdf" download>Pobierz arkusz (PDF) ↓</a>
+    <p class="dl-meta">PDF · 10 zadań · 20 poleceń · klucz do 15 poleceń</p>
+  </section>
+
+  <ul class="dl-tips">
+    <li><strong>Wydrukuj</strong> arkusz i rozwiąż go długopisem, tak jak na maturze.</li>
+    <li><strong>Ustaw timer</strong> na ok. godzinę - to mniej więcej jedna trzecia czasu na pełnym arkuszu.</li>
+    <li>Po rozwiązaniu zaznacz polecenia, przy których zgadywał(a)ś - to Twoja lista działów do powtórki.</li>
+  </ul>
+
+  <section class="dl-next">
+    <h2>Co dalej?</h2>
+    <div class="dl-next-grid">
+      <a class="dl-next-card" href="baza.html">
+        <b>Baza zadań</b>
+        <span>Zadania z arkuszy CKE pogrupowane według działów, z kluczami odpowiedzi. Bez logowania.</span>
+        <em>Przejdź do bazy →</em>
+      </a>
+      <a class="dl-next-card" href="auth.html">
+        <b>Załóż darmowe konto</b>
+        <span>Dostęp do treści zadań i kluczy CKE w jednym miejscu.</span>
+        <em>Załóż konto →</em>
+      </a>
+      <a class="dl-next-card" href="subscription.html">
+        <b>Opracowania zadań</b>
+        <span>Teoria, analiza klucza i nauka pisania pod klucz. 3 dni za darmo.</span>
+        <em>Zobacz ofertę →</em>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-brand">
+    <img src="logov2.png" alt="">
+    <span>Szkoła Komórki</span>
+  </div>
+  <div class="footer-links">
+    <a href="index.html">Strona główna</a>
+    <a href="regulamin.html">Regulamin</a>
+    <a href="polityka-prywatnosci.html">Polityka prywatności</a>
+    <a href="#" data-cookie-settings>Ustawienia cookies</a>
+  </div>
+  <p class="footer-copy">© <span id="year"></span> Szkoła Komórki. Arkusz zawiera autorskie zadania Szkoły Komórki i nie jest materiałem CKE.</p>
+</footer>
+
+<script src="js/page-arkusz-pobierz.js?v=1"></script>
+<script src="js/cookie-consent.js?v=3"></script>
+</body>
+</html>
