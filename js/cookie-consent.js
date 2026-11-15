@@ -146,6 +146,11 @@
     '#cookie-banner .cookie-btn{display:inline-flex;align-items:center;justify-content:center;padding:11px 20px;border-radius:999px;' +
     'font-weight:600;font-size:14px;cursor:pointer;border:1.5px solid #FAF5EA;background:#FAF5EA;color:#16261A;font-family:inherit;transition:transform .2s,box-shadow .2s}' +
     '#cookie-banner .cookie-btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px -10px rgba(250,245,234,.4)}' +
+    /* Lekka hierarchia wizualna: „Akceptuję” w kolorze akcentu, „Odrzucam” jako przycisk z wyraźnym obrysem.
+       Ten sam rozmiar, font, waga i poziom w banerze; oba działają jednym kliknięciem i mają pełny kontrast tekstu. */
+    '#cookie-banner .cookie-btn-accept{background:#FAF5EA;border-color:#FAF5EA;color:#16261A}' +
+    '#cookie-banner .cookie-btn-reject{background:#FAF5EA;border-color:#FAF5EA;color:#16261A}' +
+    '#cookie-banner .cookie-title{font-size:16px;font-weight:700;margin:0 0 4px;color:#FAF5EA}' +
     '#cookie-banner .cookie-btn:focus-visible,#cookie-banner input:focus-visible{outline:2px solid #C9A876;outline-offset:2px}' +
     '#cookie-banner .cookie-btn-settings{background:transparent;color:#C9A876;border-color:transparent;padding:11px 12px;text-decoration:underline;font-weight:500}' +
     '#cookie-banner .cookie-btn-settings:hover{box-shadow:none}' +
@@ -162,6 +167,8 @@
   var HTML = '' +
     '<div class="cookie-inner">' +
       '<div class="cookie-text" id="cookieDesc">' +
+        '<p class="cookie-title">Pomóż nam ulepszać Szkołę Komórki 🍪</p>' +
+        'Zgoda na cookies analityczne pokazuje nam, które zadania i funkcje są dla Ciebie najprzydatniejsze, dzięki czemu możemy rozwijać serwis. ' +
         'Używamy plików cookies i podobnych technologii. Niezbędne zapisują Twój wybór i działanie serwisu. ' +
         'Za Twoją zgodą używamy też cookies <strong>analitycznych</strong> (Google Analytics, Microsoft Clarity) ' +
         'oraz <strong>marketingowych</strong> (Meta Pixel). Zgoda jest dobrowolna, a jej brak nie ogranicza dostępu do serwisu. ' +
@@ -170,8 +177,8 @@
       '</div>' +
       '<div class="cookie-actions">' +
         '<button type="button" class="cookie-btn cookie-btn-settings" id="cookieSettingsBtn" aria-expanded="false" aria-controls="cookie-settings-panel">Ustawienia</button>' +
-        '<button type="button" class="cookie-btn" id="cookieRejectBtn">Odrzucam niekonieczne</button>' +
-        '<button type="button" class="cookie-btn" id="cookieAcceptBtn">Akceptuję wszystkie</button>' +
+        '<button type="button" class="cookie-btn cookie-btn-reject" id="cookieRejectBtn">Odrzucam niekonieczne</button>' +
+        '<button type="button" class="cookie-btn cookie-btn-accept" id="cookieAcceptBtn">Akceptuję wszystkie</button>' +
       '</div>' +
     '</div>' +
     '<div id="cookie-settings-panel" class="cookie-inner">' +
