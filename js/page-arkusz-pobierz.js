@@ -23,9 +23,10 @@
     try { sessionStorage.removeItem('ar_lead_pending'); } catch (_) {}
     var tries = 0, fired = { fb: false, ga: false };
     (function fire() {
-      if (!fired.fb && window.fbq) { try { window.fbq('track', 'Lead'); fired.fb = true; } catch (_) {} }
-      if (!fired.ga && window.gtag) { try { window.gtag('event', 'generate_lead'); fired.ga = true; } catch (_) {} }
-      if (++tries < 10 && !(fired.fb && fired.ga)) setTimeout(fire, 800);
+      if (!fired.fb && window.fbq) { try { window.fbq('track', 'Lead', { content_name: 'darmowy_arkusz' }); fired.fb = true; } catch (_) {} }
+      if (!fired.ga && window.gtag) { try { window.gtag('event', 'generate_lead', { lead_source: 'darmowy_arkusz' }); fired.ga = true; } catch (_) {} }
+      // Czekamy do ok. 60 s - użytkownik może dopiero kliknąć „Akceptuję” w banerze cookies.
+      if (++tries < 75 && !(fired.fb && fired.ga)) setTimeout(fire, 800);
     })();
   }
 
