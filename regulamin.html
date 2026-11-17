@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
+  <meta name="facebook-domain-verification" content="vz3kx4gkjxn0hq9szjjlox5o7a160b" />
   <meta charset="UTF-8">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com https://connect.facebook.net https://www.clarity.ms https://scripts.clarity.ms; connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://www.facebook.com https://connect.facebook.net https://*.clarity.ms https://c.bing.com; img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com https://www.facebook.com https://*.clarity.ms https://c.bing.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'self'">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -120,7 +121,7 @@
       <li><strong>Okres Próbny trwa 3 (trzy) dni</strong> licząc od chwili rozpoczęcia Subskrypcji i jest bezpłatny. W jego trakcie Użytkownik ma pełny dostęp do Opracowań.</li>
       <li>Okres Próbny przysługuje <strong>jednorazowo</strong> każdemu Użytkownikowi, bez względu na wybrany plan. Usługodawca uznaje, że z Okresu Próbnego skorzystała ta sama osoba, jeżeli: (a) ten sam adres e-mail (także zapisany w innej formie, np. z aliasem „+” lub — w przypadku adresów Gmail — z kropkami) był już użyty do uruchomienia Okresu Próbnego lub jakiejkolwiek Subskrypcji, albo (b) dane w Stripe wskazują na wcześniejszą Subskrypcję tej samej osoby. Informacja o wykorzystaniu Okresu Próbnego jest przechowywana także po usunięciu Konta. Jeżeli Użytkownik nie kwalifikuje się do Okresu Próbnego, informacja o tym oraz o pierwszej opłacie jest wyświetlana przed płatnością, a Subskrypcja rozpoczyna się z płatnością od razu.</li>
       <li><strong>Metoda płatności.</strong> Rozpoczęcie Okresu Próbnego wymaga podania metody płatności w Stripe. W Okresie Próbnym <strong>nie jest pobierana żadna opłata</strong>.</li>
-      <li><strong>Automatyczne przekształcenie w Subskrypcję płatną.</strong> Jeżeli Użytkownik nie anuluje Subskrypcji przed upływem Okresu Próbnego, po jego zakończeniu Subskrypcja przechodzi w płatną, a Stripe automatycznie obciąża podaną metodę płatności kwotą wybranego planu (15 zł w planie miesięcznym lub 90 zł w planie rocznym). Informacja o tym jest podawana przed rozpoczęciem Okresu Próbnego. Usługodawca lub Stripe mogą wysłać przypomnienie e-mailem przed zakończeniem Okresu Próbnego, jednak brak przypomnienia nie wpływa na zasady rozliczenia.</li>
+      <li><strong>Automatyczne przekształcenie w Subskrypcję płatną.</strong> Jeżeli Użytkownik nie anuluje Subskrypcji przed upływem Okresu Próbnego, po jego zakończeniu Subskrypcja przechodzi w płatną, a Stripe automatycznie obciąża podaną metodę płatności kwotą wybranego planu (15 zł w planie miesięcznym lub 90 zł w planie rocznym), pomniejszoną o ewentualny rabat z kodu promocyjnego (§ 5 ust. 9). Informacja o tym jest podawana przed rozpoczęciem Okresu Próbnego. Usługodawca lub Stripe mogą wysłać przypomnienie e-mailem przed zakończeniem Okresu Próbnego, jednak brak przypomnienia nie wpływa na zasady rozliczenia.</li>
       <li>Aby uniknąć opłaty, Użytkownik powinien anulować Subskrypcję <strong>przed upływem Okresu Próbnego</strong> (§ 6). Anulowanie w tym czasie powoduje, że nie zostanie pobrana żadna opłata; dostęp do Opracowań wygasa z końcem Okresu Próbnego.</li>
       <li>Subskrypcja odnawia się automatycznie na kolejne okresy rozliczeniowe (miesiąc lub rok) i jest odpłatna do czasu jej anulowania. Użytkownik wyraża na to zgodę, zawierając umowę.</li>
       <li>Subskrypcja może być w danym czasie aktywna tylko jedna na jednego Użytkownika. Usługodawca może odmówić zawarcia umowy lub wstrzymać Okres Próbny wobec osób, co do których istnieje uzasadnione podejrzenie nadużyć (np. wielokrotnego zakładania kont w celu obejścia ust. 4).</li>
@@ -140,6 +141,18 @@
       <li><strong>Faktury i rachunki.</strong> Dowód zakupu (potwierdzenie płatności lub faktura) udostępniany jest przez Stripe i dostępny w panelu zarządzania Subskrypcją. Dane nabywcy do faktury (w tym dane przedsiębiorcy) można podać w oknie płatności lub panelu Stripe; w pozostałych sprawach dotyczących dokumentów sprzedaży należy skontaktować się z Usługodawcą.</li>
       <li>Zwroty środków następują na metodę płatności użytą przy zakupie, w terminach wynikających z przepisów prawa i procedur Stripe oraz banku.</li>
       <li>Usługodawca nie zwraca opłaty za część rozpoczętego okresu rozliczeniowego po anulowaniu Subskrypcji, z zastrzeżeniem § 7 (odstąpienie od umowy), § 11 (reklamacje) oraz bezwzględnie obowiązujących przepisów prawa.</li>
+      <li><strong>Kody promocyjne.</strong>
+        <ol>
+          <li>Usługodawca może okresowo udostępniać kody promocyjne obniżające cenę Subskrypcji. Kod promocyjny <strong>START10</strong> obniża o <strong>10 zł</strong> cenę pierwszej płatności za Subskrypcję: w planie miesięcznym z 15 zł do 5 zł, a w planie rocznym z 90 zł do 80 zł.</li>
+          <li>Kod można wykorzystać do <strong>15 grudnia 2026 r.</strong> (włącznie, do godz. 23:59 czasu polskiego), w ramach ograniczonej liczby użyć. Po upływie terminu lub wyczerpaniu limitu kod przestaje działać.</li>
+          <li>Kod przysługuje wyłącznie Użytkownikowi, który nie dokonywał wcześniej płatności za Subskrypcję w Serwisie, i może być użyty jednorazowo. Nie łączy się z innymi kodami promocyjnymi.</li>
+          <li>Kod wpisuje się w oknie płatności Stripe przed potwierdzeniem zamówienia; obniżona kwota jest tam wyświetlana przed zawarciem umowy. Kod nie może być wymieniony na gotówkę.</li>
+          <li>Rabat nie wpływa na Okres Próbny (§ 4) — nadal trwa on 3 dni i jest bezpłatny. Obniżona kwota jest pobierana po jego zakończeniu, jako pierwsza płatność (lub od razu, jeżeli Okres Próbny nie przysługuje).</li>
+          <li>Rabat obejmuje wyłącznie pierwszą płatność. Kolejne okresy rozliczeniowe są rozliczane według ceny z ust. 1, a cena promocyjna nie jest „dotychczasową ceną” w rozumieniu ust. 6.</li>
+          <li>W razie odstąpienia od umowy (§ 7) lub zwrotu środków zwracana jest kwota faktycznie zapłacona, a przy obliczaniu kwoty proporcjonalnej (§ 7 ust. 3) uwzględnia się cenę po rabacie.</li>
+          <li>Usługodawca może zakończyć promocję przed terminem wskazanym w pkt 2 wyłącznie przez wyczerpanie limitu użyć; nie wpływa to na zawarte już umowy.</li>
+        </ol>
+      </li>
     </ol>
   </section>
 
