@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
+  <meta name="facebook-domain-verification" content="vz3kx4gkjxn0hq9szjjlox5o7a160b" />
   <meta charset="UTF-8">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com https://connect.facebook.net https://www.clarity.ms https://scripts.clarity.ms; connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://www.facebook.com https://connect.facebook.net https://*.clarity.ms https://c.bing.com https://dtfkjtsjubfxsahrgkua.supabase.co; img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com https://www.facebook.com https://*.clarity.ms https://c.bing.com https://dtfkjtsjubfxsahrgkua.supabase.co https://maturabiolchem.pl; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; object-src 'none'; base-uri 'self'; form-action 'self'">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=9">
+  <link rel="stylesheet" href="css/style.css?v=11">
 </head>
 <body>
 
@@ -190,6 +191,10 @@
   <main class="main-content">
     <div class="results-header">
       <span class="results-count" id="results-count">Ładowanie…</span>
+      <button type="button" class="btn btn-outline btn-sm print-open-btn" data-click="printOpen">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Drukuj / PDF
+      </button>
     </div>
 
     <div id="zadania-list" class="zadania-list">
@@ -230,7 +235,8 @@
 <script src="js/safe-html.js?v=2"></script>
 <script src="js/auth.js?v=7"></script>
 <script src="js/actions.js"></script>
-<script src="js/zadania.js?v=8"></script>
+<script src="js/zadania.js?v=9"></script>
+<script src="js/print.js?v=2"></script>
 <script src="js/page-baza.js?v=1"></script>
 <script src="js/nav.js?v=1"></script>
 <script src="js/cookie-consent.js?v=3"></script>

@@ -2490,3 +2490,323 @@ a:hover { text-decoration: underline; }
 }
 .as-cta { width: 100%; justify-content: center; font-size: 16px; padding: 14px 20px; }
 .as-fine { font-size: 12px; color: var(--text-muted); margin-top: 12px; line-height: 1.6; text-align: center; }
+
+
+/* ============================================================
+   DRUKOWANIE ZADAŃ (js/print.js) — okno wyboru + układ PDF
+   ============================================================ */
+
+/* Przycisk przy liczniku wyników */
+.print-open-btn svg { flex-shrink: 0; }
+
+/* Pole „do wydruku” z numerem na karcie zadania */
+.print-pick {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 11px 3px 7px;
+  border-radius: 999px;
+  background: var(--sage);
+  color: var(--forest-deep);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  transition: background .2s ease, color .2s ease;
+}
+.print-pick input { width: 15px; height: 15px; margin: 0; cursor: pointer; accent-color: var(--clay); }
+.print-pick-num::before { content: '#'; opacity: .6; }
+.print-pick:hover { background: rgba(42,71,44,.16); }
+.print-pick:has(input:checked) { background: var(--forest); color: var(--cream); }
+.print-pick--locked { opacity: .55; cursor: not-allowed; padding-left: 11px; }
+.print-pick--locked:hover { background: var(--sage); }
+
+/* Okno modalne */
+body.pm-open { overflow: hidden; }
+.pm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;   /* nad banerem cookies (99999), żeby przycisk „Wydrukuj” był zawsze dostępny */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(22,38,26,.55);
+  backdrop-filter: blur(3px);
+}
+.pm-overlay[hidden], .pm-pane[hidden], .pm-error[hidden] { display: none !important; }
+
+.pm-dialog {
+  display: flex;
+  flex-direction: column;
+  width: min(720px, 100%);
+  max-height: min(90vh, 880px);
+  background: var(--paper);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+.pm-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 26px 0;
+}
+.pm-head h2 { font-size: 24px; }
+.pm-close {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(42,71,44,.2);
+  background: transparent;
+  color: var(--forest);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+.pm-close:hover { background: var(--forest); color: var(--cream); border-color: var(--forest); }
+
+.pm-tabs { display: flex; gap: 8px; padding: 16px 26px 0; flex-wrap: wrap; }
+.pm-tab {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1.5px solid transparent;
+  background: var(--sage);
+  color: var(--forest-deep);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+.pm-tab:hover { border-color: var(--forest); }
+.pm-tab.active { background: var(--forest); color: var(--cream); border-color: var(--forest); }
+
+.pm-body { flex: 1; overflow-y: auto; padding: 20px 26px; min-height: 0; }
+.pm-lead { font-size: 14px; color: var(--text-muted); margin-bottom: 18px; }
+
+.pm-label {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--text-muted);
+}
+.pm-input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: var(--radius-s);
+  border: 1.5px solid rgba(42,71,44,.2);
+  background: var(--cream);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--text);
+}
+.pm-input:focus { outline: none; border-color: var(--forest); }
+.pm-input:disabled { opacity: .5; cursor: not-allowed; }
+
+.pm-quick { display: flex; gap: 16px; margin-top: 8px; }
+.pm-link {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--forest);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.pm-link:hover { color: var(--clay); }
+
+.pm-error, .pm-count--error { margin-top: 8px; font-size: 13px; color: #8b2020; }
+.pm-summary {
+  margin-top: 16px;
+  padding: 12px 16px;
+  border-radius: var(--radius-s);
+  background: var(--cream);
+  border: 1px solid rgba(42,71,44,.1);
+  font-size: 14px;
+  line-height: 1.55;
+}
+.pm-scope { font-family: var(--font-mono); font-size: 11px; color: var(--clay); margin-bottom: 4px; }
+.pm-count--loading { color: var(--text-muted); font-size: 13px; }
+.pm-hint { font-size: 12px; color: var(--text-muted); }
+
+.pm-group { margin-top: 22px; padding-top: 18px; border-top: 1px solid rgba(42,71,44,.1); }
+.pm-checks { display: flex; gap: 22px; flex-wrap: wrap; }
+.pm-check { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
+.pm-check input { width: 17px; height: 17px; accent-color: var(--forest); cursor: pointer; }
+.pm-group .pm-hint { margin-top: 8px; }
+
+.pm-dzialy { display: flex; flex-direction: column; gap: 2px; max-height: 240px; overflow-y: auto; padding: 4px 2px; }
+.pm-filter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
+#pm-filters-ui .filter-group { margin-bottom: 20px; }
+#pm-filters-ui .btn-clear-filters { margin-top: 0; }
+
+.pm-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 26px;
+  background: var(--cream);
+  border-top: 1px solid rgba(42,71,44,.1);
+}
+.pm-status { font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); }
+.pm-status--error { color: #8b2020; }
+.pm-foot .btn:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+
+@media (max-width: 600px) {
+  .pm-overlay { padding: 0; align-items: stretch; }
+  .pm-dialog { width: 100%; max-height: none; border-radius: 0; }
+  .pm-head, .pm-tabs, .pm-body, .pm-foot { padding-left: 18px; padding-right: 18px; }
+  .pm-filter-grid { grid-template-columns: 1fr; }
+  .pm-foot { flex-direction: column; align-items: stretch; }
+  .pm-foot .btn { justify-content: center; }
+}
+
+/* ── Dokument do druku: ukryty na ekranie ───────────────────── */
+#print-root { display: none; }
+
+@media print {
+  html, body.printing {
+    background: #fff !important;
+    overflow: visible !important;
+    max-width: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+  body.printing > *:not(#print-root) { display: none !important; }
+  body.printing #print-root {
+    display: block;
+    color: #16261A;
+    font-family: var(--font-body);
+    font-size: 10.5pt;
+    line-height: 1.55;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* thead/tfoot powtarzają się na każdej stronie i rezerwują miejsce na marginesy oraz stopkę */
+  #print-root .pr-table { width: calc(100% - 32mm); margin: 0 16mm; border-collapse: collapse; }
+  /* Selektory z > — dotyczą tylko tabeli dokumentu, nie tabel z treści zadań */
+  #print-root .pr-table > thead > tr > td,
+  #print-root .pr-table > tfoot > tr > td { padding: 0; border: 0; }
+  #print-root .pr-table > tbody > tr > td { padding: 0; border: 0; vertical-align: top; }
+  #print-root .pr-sp-top { height: 14mm; }
+  #print-root .pr-sp-bot { height: 30mm; }
+
+  /* Wiersze nierozdzielne: obrazek (i tabela z obrazkiem) w całości na jednej stronie */
+  #print-root .pr-row--solid,
+  #print-root .pr-row--solid > td,
+  #print-root .pr-row--solid .pr-body {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  /* Nagłówek zadania i etykiety trzymają się z następnym wierszem */
+  #print-root .pr-row--keep { break-after: avoid; page-break-after: avoid; }
+
+  /* Stopka z logo na każdej stronie */
+  #print-root .pr-footer {
+    position: fixed;
+    left: 16mm; right: 16mm; bottom: 9mm;
+    height: 15mm;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 8mm;
+    padding-top: 3mm;
+    border-top: .5pt solid #C9A876;
+    background: #fff;
+    font-family: var(--font-mono);
+    font-size: 7.5pt;
+    color: #6B7A6C;
+  }
+  #print-root .pr-footer img { height: 8.5mm; width: auto; display: block; }
+
+  /* Strona tytułowa */
+  #print-root .pr-cover {
+    height: 246mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    break-after: page;
+    page-break-after: always;
+  }
+  #print-root .pr-cover-kicker {
+    font-family: var(--font-mono);
+    font-size: 9pt;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: #8C6745;
+    margin-bottom: 8mm;
+  }
+  #print-root .pr-cover-title {
+    font-family: var(--font-display);
+    font-size: 40pt;
+    font-weight: 600;
+    line-height: 1.08;
+    color: #2A472C;
+  }
+  #print-root .pr-cover-title em { font-style: italic; font-weight: 500; color: #8C6745; }
+  #print-root .pr-cover-rule { width: 30mm; height: 1.2mm; background: #8C6745; margin: 10mm 0 12mm; border-radius: 1mm; }
+  #print-root .pr-cover-meta { display: grid; gap: 4mm; max-width: 130mm; }
+  #print-root .pr-cover-meta div { display: grid; grid-template-columns: 32mm 1fr; gap: 4mm; align-items: baseline; }
+  #print-root .pr-cover-meta dt {
+    font-family: var(--font-mono);
+    font-size: 7.5pt;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #6B7A6C;
+  }
+  #print-root .pr-cover-meta dd { font-size: 11pt; font-weight: 500; color: #16261A; }
+  #print-root .pr-cover-note { margin-top: 10mm; font-size: 9pt; font-style: italic; color: #6B7A6C; max-width: 130mm; }
+
+  /* Zadania */
+  #print-root .pr-task > tr:first-child .pr-task-head { margin-top: 8mm; }
+  #print-root .pr-task-head {
+    display: flex;
+    align-items: baseline;
+    gap: 4mm;
+    padding-bottom: 1.5mm;
+    margin-bottom: 1.5mm;
+    border-bottom: .8pt solid #2A472C;
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+  #print-root .pr-task-id { font-family: var(--font-display); font-size: 12.5pt; font-weight: 600; color: #2A472C; }
+  #print-root .pr-task-typ { font-family: var(--font-mono); font-size: 7.5pt; letter-spacing: .08em; text-transform: uppercase; color: #8C6745; }
+  #print-root .pr-task-meta { font-family: var(--font-mono); font-size: 7.5pt; color: #6B7A6C; line-height: 1.4; break-after: avoid; }
+  #print-root .pr-label {
+    margin: 4mm 0 1.5mm;
+    font-family: var(--font-mono);
+    font-size: 7pt;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #8C6745;
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+  #print-root .pr-body { font-size: 10.5pt; line-height: 1.55; color: #16261A; padding-bottom: 1.6mm; display: flow-root; }
+  #print-root .pr-row--key .pr-body { font-size: 10pt; }
+  #print-root .pr-none, #print-root .pr-locked { color: #6B7A6C; font-style: italic; }
+  #print-root .pr-locked {
+    margin-top: 3mm;
+    padding: 2.5mm 3.5mm;
+    border: .6pt dashed #C9A876;
+    border-radius: 2mm;
+    font-size: 9.5pt;
+  }
+
+  /* Treść z edytora: bez przewijania, tabele i obrazki mieszczą się na stronie */
+  #print-root .rich-content table { display: table; width: 100%; overflow: visible; font-size: 9.5pt; }
+  #print-root .rich-content tr { break-inside: avoid; page-break-inside: avoid; }
+  #print-root .rich-content th { background: #E7EAD9 !important; }
+  #print-root .rich-content td, #print-root .rich-content th { border-color: rgba(42,71,44,.5); }
+  #print-root .rich-content img { max-height: 105mm; break-inside: avoid; page-break-inside: avoid; border-radius: 0; }
+  #print-root .rich-content a { color: inherit; text-decoration: none; }
+}

@@ -14,6 +14,7 @@ const state = {
   strona:    1,
   totalCount: 0,
   hasSubscription: false,
+  items:     [],   // zadania z aktualnie wyświetlanej strony (źródło dla wydruku „z tej strony”)
 };
 
 // ── URL params sync ─────────────────────────────────────────
@@ -58,6 +59,20 @@ function stateToURL() {
 }
 
 // ── Supabase query ──────────────────────────────────────────
+// Wspólne filtrowanie — używane przez listę na stronie i przez wydruk (print.js),
+// żeby oba miejsca zawsze dawały te same wyniki.
+function applyFilters(query, filtry) {
+  if (filtry.dzialy.length) {
+    query = query.overlaps('dzialy', expandKatIds(filtry.dzialy));
+  }
+  if (filtry.rok)       query = query.eq('rok',       parseInt(filtry.rok));
+  if (filtry.typ)       query = query.eq('typ',       filtry.typ);
+  if (filtry.kategoria) query = query.eq('kategoria', filtry.kategoria);
+  if (filtry.formula)   query = query.eq('formula',   filtry.formula);
+  if (filtry.poziom)    query = query.eq('poziom',    filtry.poziom);
+  return query;
+}
+
 async function fetchZadania() {
   const pageSize = CONFIG.app.pageSize;
   const from = (state.strona - 1) * pageSize;
@@ -71,14 +86,7 @@ async function fetchZadania() {
     .order('numer_zadania', { ascending: true })
     .range(from, to);
 
-  if (state.filtry.dzialy.length) {
-    query = query.overlaps('dzialy', expandKatIds(state.filtry.dzialy));
-  }
-  if (state.filtry.rok)       query = query.eq('rok',       parseInt(state.filtry.rok));
-  if (state.filtry.typ)       query = query.eq('typ',       state.filtry.typ);
-  if (state.filtry.kategoria) query = query.eq('kategoria', state.filtry.kategoria);
-  if (state.filtry.formula)   query = query.eq('formula',   state.filtry.formula);
-  if (state.filtry.poziom)    query = query.eq('poziom',    state.filtry.poziom);
+  query = applyFilters(query, state.filtry);
 
   const { data, count, error } = await query;
   if (error) throw error;
@@ -208,7 +216,18 @@ function renderAutorskiePaywall(z) {
     </div>`;
 }
 
-function renderZadanieCard(z) {
+// Checkbox „do wydruku” z numerem porządkowym zadania na liście (1…N). Zadania autorskie
+// zablokowane dla użytkownika bez subskrypcji (z.zablokowane — decyzja bazy) są nieaktywne.
+function renderPrintPick(z, idx) {
+  if (typeof idx !== 'number') return '';
+  const n = idx + 1;
+  if (z.zablokowane) {
+    return `<span class="print-pick print-pick--locked" title="Wydruk zadań autorskich dostępny w premium"><span class="print-pick-num">${n}</span></span>`;
+  }
+  return `<label class="print-pick" title="Zaznacz do wydruku"><input type="checkbox" data-change="printPick" data-idx="${idx}" aria-label="Zaznacz zadanie ${n} do wydruku"><span class="print-pick-num">${n}</span></label>`;
+}
+
+function renderZadanieCard(z, idx) {
   const slug = buildSlug(z);
   const locked = !!z.zablokowane;
   const hasOpr = !!z.ma_opracowanie;
@@ -218,6 +237,7 @@ function renderZadanieCard(z) {
       <div class="zadanie-header">
         <div>
           <div class="zadanie-meta">
+            ${renderPrintPick(z, idx)}
             <span class="zadanie-id">Rok ${z.rok} · Zad. ${escHtml(z.numer_zadania)}</span>
             ${renderTypBadge(z.typ)}
             ${hasOpr ? '<span class="nav-sub-badge" style="font-size:10px">opracowanie ✓</span>' : ''}
@@ -323,11 +343,13 @@ async function loadZadania() {
   try {
     const { data, count } = await fetchZadania();
     state.totalCount = count;
+    state.items = data;
     const heroCountEl = document.getElementById('hero-count');
     if (heroCountEl) heroCountEl.textContent = count.toLocaleString('pl-PL');
     renderList(data);
     renderCount(count);
     renderPagination(count);
+    if (typeof printOnListRendered === 'function') printOnListRendered();
   } catch (err) {
     console.error(err);
     listEl.innerHTML = `<div class="state-error"><p>Błąd ładowania zadań. Spróbuj odświeżyć stronę.</p></div>`;
